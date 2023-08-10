@@ -1,3 +1,9 @@
+# CHANGELOG
+
 ## 0.0.1
 
-* TODO: Describe initial release.
+** FIRST RELEASE
+
+## 0.0.2
+
+** UPDATE README

@@ -13,6 +13,48 @@ This package provide FormField for some data type on your application, it can wo
 
 ## Usage
 
+### Require Theme Extension
+
+FormFiel is required Application use ThemeExtension: **FlFormFieldTheme**
+
+#### 1, Configuration
+
+```dart
+    MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData.dark(
+        useMaterial3: true,
+        ).copyWith(extensions: [
+        FlFormFieldTheme.dark(context),
+        ]),
+        home: const MainExample(),
+    );
+```
+
+#### 2, FlFormFieldTheme
+
+```dart
+...
+  final TextStyle labelStyle;
+  final InputDecorationTheme inputDecorationTheme;
+  final TextStyle style;
+  final TextStyle errorStyle;
+  final TextStyle placeHolderStyle;
+
+  FlFormFieldTheme({
+    required this.labelStyle,
+    required this.inputDecorationTheme,
+    required this.style,
+    required this.errorStyle,
+    required this.placeHolderStyle,
+  });
+
+```
+
+```dart
+
+```
+
 ### FlTextFormField
 
 Example Simple Text

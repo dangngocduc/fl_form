@@ -1,10 +1,10 @@
 name: fl_form
-description: A new Flutter package project.
-version: 0.0.1
-homepage:
+description: Flutter package support FormField for Text,Date, Bool, ItemPicker..
+version: 0.0.2
+homepage: https://github.com/dangngocduc/fl_form
 
 environment:
-  sdk: '>=2.18.0 <3.0.0'
+  sdk: '>=2.18.0 <4.0.0'
   flutter: ">=1.17.0"
 
 dependencies:
