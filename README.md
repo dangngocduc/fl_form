@@ -56,4 +56,318 @@ Example Area Text
     ),
 ```
 
-## Additional information
+### FlDateFormField
+
+``` dart
+    FlDateFormField(
+        autovalidateMode: AutovalidateMode.always,
+        prefixIcon: const Icon(Icons.date_range),
+        firstDate: DateTime.now(),
+        lastDate: DateTime.now().add(const Duration(days: 100)),
+        label: 'Date of birth',
+        placeholderText: 'dd/MM/yyyy',
+        validator: (value) {
+        return 'Date invalid';
+        },
+    ),
+```
+
+### FlTimeFormField
+
+```dart
+    FlTimeFormField(
+        label: 'Time Start',
+        placeholderText: 'HH:MM',
+        autovalidateMode: AutovalidateMode.always,
+        validator: (value) {
+        return 'Time invalid';
+        },
+        prefixIcon: Icon(Icons.alarm),
+    ),
+```
+
+
+### FlDateAndTimeFormField
+
+```dart
+    FlDateAndTimeFormField(
+        firstDate: DateTime.now(),
+        lastDate: DateTime.now().add(const Duration(days: 100)),
+        label: 'Date of birth',
+        placeholderText: 'dd/MM/yyyy',
+        autovalidateMode: AutovalidateMode.always,
+        validator: (value) => 'Date invalid',
+    ),
+```
+
+### FlDurationFormField
+
+```dart
+    FlDurationFormField(
+        prefixIcon: Icon(Icons.date_range),
+        label: 'Select Duration',
+        placeholderText: 'hh : mm',
+    ),
+```
+
+### AvatarFormFieldPage
+
+#### 1, Default Avatar FormField
+
+```dart
+    FlAvatarFormField(
+    radius: 64,
+    autovalidateMode: AutovalidateMode.always,
+    validator: (value) {
+        if (value == null) {
+        return 'Need update your avatar';
+        }
+    },
+    ),
+```
+
+#### 2, Customize Avatar FormField
+
+```dart
+    Center(
+    child: FlRawAvatarFormField(
+        builder: (
+            {required context, data, required didChange, error}) {
+        if (data == null) {
+            return GestureDetector(
+            onTap: () {
+                FlRawAvatarFormField.pickFile().then((value) {
+                if (value != null) {
+                    didChange(value);
+                }
+                });
+            },
+            child: Container(
+                height: 80,
+                width: 80,
+                decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(12),
+                ),
+            ),
+            );
+        } else {
+            if (data.file != null) {
+            return Container(
+                height: 80,
+                width: 80,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: FileImage(data.file!))),
+            );
+            } else {
+            return Container(
+                height: 80,
+                width: 80,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(data.link!))),
+            );
+            }
+        }
+        },
+    ),
+    ),
+```
+
+### Bool Value FormField
+
+#### 1, FlBoolFormField
+
+```dart
+    FlBoolFormField(
+        spacing: 16,
+        title: 'Select All',
+    )
+```
+
+#### 2, FlRawBoolFormField
+
+```dart
+    FlRawBoolFormField(
+        title: 'Select All',
+        rawBuilder: (context, data, didChange) {
+        return Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Row(
+            children: [
+                Checkbox(
+                value: data ?? false,
+                onChanged: (value) {
+                    didChange(value);
+                },
+                ),
+                const Expanded(
+                child: Text('Select All'),
+                )
+            ],
+            ),
+        );
+        },
+    ),
+```
+
+### Single Item Picker Form Field
+
+```dart
+    SingleItemPickerFormField<SimpleData>(
+        label: 'Select Item customize',
+        placeholderText: 'Select Item',
+        itemListBuilder: (context, data, isSelected) {
+        return Container(
+            padding: const EdgeInsets.symmetric(
+            vertical: 12,
+            horizontal: 16,
+            ),
+            child: Row(
+            children: [
+                const CircleAvatar(
+                radius: 24,
+                ),
+                const SizedBox(
+                width: 12,
+                ),
+                Expanded(
+                    child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                    Text(
+                    data.title,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const SizedBox(
+                    height: 2,
+                    ),
+                    Text(
+                    data.subTitle,
+                    style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                ],
+                )),
+                if (isSelected) const Icon(Icons.done)
+            ],
+            ),
+        );
+        },
+        contentSelectedBuilder: (data, context) => Container(
+        child: Row(
+            children: [
+            const CircleAvatar(
+                radius: 16,
+            ),
+            const SizedBox(
+                width: 12,
+            ),
+            Expanded(
+                child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                Text(
+                    data.title,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                ),
+                const SizedBox(
+                    height: 2,
+                ),
+                Text(
+                    data.subTitle,
+                    style: Theme.of(context).textTheme.labelMedium,
+                ),
+                ],
+            ))
+            ],
+        ),
+        ),
+        options: [
+        SimpleData(title: 'Title 1', subTitle: 'Sub title 1'),
+        SimpleData(title: 'Title 2', subTitle: 'Sub title 2'),
+        SimpleData(title: 'Title 3', subTitle: 'Sub title 3'),
+        SimpleData(title: 'Title 4', subTitle: 'Sub title 4'),
+        SimpleData(title: 'Title 5', subTitle: 'Sub title 5'),
+        SimpleData(title: 'Title 6', subTitle: 'Sub title 6'),
+        SimpleData(title: 'Title 7', subTitle: 'Sub title 7'),
+        SimpleData(title: 'Title 8', subTitle: 'Sub title 8'),
+        ],
+    )
+```
+
+### Multiple Item Picker Form Field
+
+```dart
+    MultipleItemPickerFormField<SimpleData>(
+        label: 'Select Items customize',
+        placeholderText: 'Select Items',
+        autovalidateMode: AutovalidateMode.always,
+        validator: (value) {
+        return 'Data Invalid';
+        },
+        itemListBuilder: (context, data, isSelected) {
+        return Container(
+            padding: const EdgeInsets.symmetric(
+            vertical: 12,
+            horizontal: 16,
+            ),
+            child: Row(
+            children: [
+                const CircleAvatar(
+                radius: 24,
+                ),
+                const SizedBox(
+                width: 12,
+                ),
+                Expanded(
+                    child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                    Text(
+                    data.title,
+                    style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                    const SizedBox(
+                    height: 2,
+                    ),
+                    Text(
+                    data.subTitle,
+                    style: Theme.of(context).textTheme.labelMedium,
+                    ),
+                ],
+                )),
+                if (isSelected) const Icon(Icons.done)
+            ],
+            ),
+        );
+        },
+        contentSelectedBuilder: (data, context) => Container(
+        child: Wrap(
+            spacing: 8,
+            children: [
+            ...data
+                    ?.map((e) => Chip(
+                            label: Text(e.title),
+                        ))
+                    .toList() ??
+                []
+            ],
+        ),
+        ),
+        options: [
+        SimpleData(title: 'Title 1', subTitle: 'Sub title 1'),
+        SimpleData(title: 'Title 2', subTitle: 'Sub title 2'),
+        SimpleData(title: 'Title 3', subTitle: 'Sub title 3'),
+        SimpleData(title: 'Title 4', subTitle: 'Sub title 4'),
+        SimpleData(title: 'Title 5', subTitle: 'Sub title 5'),
+        SimpleData(title: 'Title 6', subTitle: 'Sub title 6'),
+        SimpleData(title: 'Title 7', subTitle: 'Sub title 7'),
+        SimpleData(title: 'Title 8', subTitle: 'Sub title 8'),
+        ],
+    )
+```
