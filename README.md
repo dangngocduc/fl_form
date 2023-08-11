@@ -59,6 +59,8 @@ FormFiel is required Application use ThemeExtension: **FlFormFieldTheme**
 
 ### FlTextFormField
 
+![Guide](/images/textfield_guide.svg)
+
 Example Simple Text
 
 ``` dart
@@ -101,6 +103,8 @@ Example Area Text
 ```
 
 ### FlDateFormField
+
+![Guide](/images/date_form_field_guide.svg)
 
 ``` dart
     FlDateFormField(
