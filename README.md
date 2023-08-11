@@ -1,6 +1,5 @@
 ## Features
 
-![Guide](/images/textfield_guide.svg){ width=100% }
 <img src="/images/textfield_guide.svg" width="100%"/>
 
 This package provide FormField for some data type on your application, it can work with Form on your application.
@@ -60,7 +59,8 @@ FormFiel is required Application use ThemeExtension: **FlFormFieldTheme**
 
 ### FlTextFormField
 
-![Guide](/images/textfield_guide.svg)
+<img src="/images/textfield_guide.svg" width="100%"/>
+
 
 Example Simple Text
 
@@ -105,7 +105,8 @@ Example Area Text
 
 ### FlDateFormField
 
-![Guide](/images/date_form_field_guide.svg)
+<img src="/images/date_form_field_guide.svg" width="100%"/>
+
 
 ``` dart
     FlDateFormField(
@@ -134,7 +135,6 @@ Example Area Text
         prefixIcon: Icon(Icons.alarm),
     ),
 ```
-
 
 ### FlDateAndTimeFormField
 
