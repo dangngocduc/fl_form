@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:example/group_demo_widget.dart';
 import 'package:fl_form/formfield/fl_avatar_form_field.dart';
 import 'package:fl_form/formfield/fl_raw_avatar_form_field.dart';
@@ -34,6 +33,7 @@ class AvatarFormFieldPage extends StatelessWidget {
                   if (value == null) {
                     return 'Need update your avatar';
                   }
+                  return null;
                 },
               ),
             ]),

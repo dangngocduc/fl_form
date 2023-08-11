@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:fl_form/formfield/fl_bool_form_field.dart';
 import 'package:fl_form/formfield/fl_raw_bool_form_field.dart';
 import 'package:flutter/material.dart';

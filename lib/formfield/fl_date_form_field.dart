@@ -16,6 +16,7 @@ class FlDateFormField extends FormField<DateTime> {
     required String placeholderText,
     bool isRequired = false,
     Widget? prefixIcon,
+    Widget? suffixIcon,
     super.key,
   }) : super(
           builder: (field) {
@@ -61,6 +62,7 @@ class FlDateFormField extends FormField<DateTime> {
                     decoration: InputDecoration(
                       hintText: placeholderText,
                       prefixIcon: prefixIcon,
+                      suffixIcon: suffixIcon,
                       enabledBorder: state.hasError
                           ? Theme.of(field.context)
                               .extension<FlFormFieldTheme>()

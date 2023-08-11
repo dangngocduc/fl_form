@@ -1,8 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 
 import 'fl_form_field_theme.dart';
 import 'fl_raw_avatar_form_field.dart';
@@ -90,7 +86,7 @@ class FlAvatarFormField extends FormField<FileOrLink> {
                                   color: borderColor,
                                   size: 16,
                                 )
-                              : Icon(
+                              : const Icon(
                                   Icons.edit,
                                   color: Colors.white,
                                   size: 16,

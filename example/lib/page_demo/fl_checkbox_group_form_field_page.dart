@@ -1,6 +1,4 @@
-import 'dart:developer' as developer;
 import 'package:fl_form/formfield/fl_checkbox_group_form_field.dart';
-import 'package:fl_form/formfield/fl_radio_button_form_field.dart';
 import 'package:flutter/material.dart';
 
 class FlCheckBoxGroupFormFieldPage extends StatefulWidget {
@@ -37,6 +35,7 @@ class _FlCheckBoxGroupFormFieldPageState
               autovalidateMode: AutovalidateMode.always,
               validator: (value) {
                 if (value == null || value.isEmpty) return 'Data invalid';
+                return null;
               },
               label: 'Select Item',
               options: const [

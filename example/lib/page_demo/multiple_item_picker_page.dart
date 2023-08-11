@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:example/group_demo_widget.dart';
 import 'package:fl_form/formfield/multiple_item_picker_form_field.dart';
 import 'package:flutter/material.dart';
@@ -67,7 +66,7 @@ class _MultipleItemPickerPageState extends State<MultipleItemPickerPage> {
                           ),
                           Expanded(
                             child: Text(
-                              '${value.toString()}',
+                              value.toString(),
                             ),
                           ),
                           if (isSelected) const Icon(Icons.done)
@@ -230,21 +229,19 @@ class _MultipleItemPickerPageState extends State<MultipleItemPickerPage> {
                       ),
                     );
                   },
-                  contentSelectedBuilder: (data, context) => Container(
-                    child: Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 16,
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        Expanded(
-                            child: Text(
-                          data.toString(),
-                        ))
-                      ],
-                    ),
+                  contentSelectedBuilder: (data, context) => Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 16,
+                      ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Expanded(
+                          child: Text(
+                        data.toString(),
+                      ))
+                    ],
                   ),
                   options: const [
                     'Afghanistan',
@@ -300,18 +297,16 @@ class _MultipleItemPickerPageState extends State<MultipleItemPickerPage> {
                       ),
                     );
                   },
-                  contentSelectedBuilder: (data, context) => Container(
-                    child: Wrap(
-                      spacing: 8,
-                      children: [
-                        ...data
-                                ?.map((e) => Chip(
-                                      label: Text(e.title),
-                                    ))
-                                .toList() ??
-                            []
-                      ],
-                    ),
+                  contentSelectedBuilder: (data, context) => Wrap(
+                    spacing: 8,
+                    children: [
+                      ...data
+                              ?.map((e) => Chip(
+                                    label: Text(e.title),
+                                  ))
+                              .toList() ??
+                          []
+                    ],
                   ),
                   options: [
                     SimpleData(title: 'Title 1', subTitle: 'Sub title 1'),

@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 
 typedef ContentSelectedBuilder<T> = Widget Function(
@@ -59,7 +58,7 @@ class _State<T> extends State<MultipleItemPickerBottomSheet<T>> {
   @override
   Widget build(BuildContext context) {
     if (widget.options.isEmpty) {
-      return Container(
+      return const SizedBox(
         height: 200,
         child: Text('Empty Data'),
       );

@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 
 class GroupDemoWidget extends StatelessWidget {
@@ -29,7 +28,7 @@ class GroupDemoWidget extends StatelessWidget {
             ),
           ),
           ...children.map((e) => Padding(
-                padding: EdgeInsets.only(top: 12),
+                padding: const EdgeInsets.only(top: 12),
                 child: e,
               ))
         ],

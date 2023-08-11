@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math_64.dart' as math;
 
 class AppCustomPaint extends CustomPainter {
   @override

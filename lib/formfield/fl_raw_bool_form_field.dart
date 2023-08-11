@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'fl_form_field_theme.dart';
-
 typedef FlRawBoolFormFieldBuilder = Widget Function(
   BuildContext context,
   bool? data,

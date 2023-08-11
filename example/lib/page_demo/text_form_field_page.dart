@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:fl_form/formfield/fl_text_form_field.dart';
 import 'package:flutter/material.dart';
 
@@ -45,7 +44,7 @@ class TextFormFieldPage extends StatelessWidget {
               title: 'FormFiel Icon',
               children: [
                 FlTextFormField(
-                  prefixIcon: Icon(Icons.person),
+                  prefixIcon: const Icon(Icons.person),
                   label: 'Name',
                   placeholderText: 'Type your name',
                 ),

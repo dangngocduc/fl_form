@@ -1,5 +1,7 @@
 ## Features
 
+![Guide](/images/textfield_guide.svg)
+
 This package provide FormField for some data type on your application, it can work with Form on your application.
 
 - Text Input

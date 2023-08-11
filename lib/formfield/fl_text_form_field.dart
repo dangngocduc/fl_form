@@ -67,8 +67,8 @@ class FlTextFormField extends FormField<String> {
                               state.toglgleShowPass();
                             },
                             child: state.obscureText
-                                ? Icon(Icons.visibility_outlined)
-                                : Icon(Icons.visibility_off_outlined),
+                                ? const Icon(Icons.visibility_outlined)
+                                : const Icon(Icons.visibility_off_outlined),
                           )
                         : null,
                     enabledBorder: state.hasError

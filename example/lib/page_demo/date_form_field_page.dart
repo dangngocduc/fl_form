@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:fl_form/formfield/fl_date_and_time_form_field.dart';
 import 'package:fl_form/formfield/fl_date_form_field.dart';
 import 'package:fl_form/formfield/fl_duration_form_field.dart';
@@ -59,7 +58,7 @@ class DateFormFieldPage extends StatelessWidget {
                 FlTimeFormField(
                   label: 'Time Start',
                   placeholderText: 'HH:MM',
-                  prefixIcon: Icon(Icons.alarm),
+                  prefixIcon: const Icon(Icons.alarm),
                 ),
                 FlTimeFormField(
                   label: 'Time Start',
@@ -68,7 +67,7 @@ class DateFormFieldPage extends StatelessWidget {
                   validator: (value) {
                     return 'Time invalid';
                   },
-                  prefixIcon: Icon(Icons.alarm),
+                  prefixIcon: const Icon(Icons.alarm),
                 ),
               ],
             ),
@@ -81,7 +80,7 @@ class DateFormFieldPage extends StatelessWidget {
                 FlDateAndTimeFormField(
                   firstDate: DateTime.now(),
                   lastDate: DateTime.now().add(const Duration(days: 100)),
-                  prefixIcon: Icon(Icons.date_range),
+                  prefixIcon: const Icon(Icons.date_range),
                   label: 'Date of birth',
                   placeholderText: 'dd/MM/yyyy',
                 ),
@@ -108,7 +107,7 @@ class DateFormFieldPage extends StatelessWidget {
               title: 'Duration',
               children: [
                 FlDurationFormField(
-                  prefixIcon: Icon(Icons.date_range),
+                  prefixIcon: const Icon(Icons.date_range),
                   label: 'Select Duration',
                   placeholderText: 'hh : mm',
                 ),

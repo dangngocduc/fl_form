@@ -54,7 +54,7 @@ class FlDurationFormField extends FormField<Duration> {
                     showCupertinoModalPopup<Duration>(
                       context: state.context,
                       builder: (context) {
-                        Duration duration = state.value ?? Duration();
+                        Duration duration = state.value ?? const Duration();
                         return StatefulBuilder(
                           builder: (context, setState) {
                             return Column(

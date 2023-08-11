@@ -73,7 +73,7 @@ class SingleItemPickerFormField<T> extends FormField<T> {
                     decoration: InputDecoration(
                       hintText: placeholderText,
                       prefixIcon: prefixIcon,
-                      suffixIcon: Icon(Icons.keyboard_arrow_down),
+                      suffixIcon: const Icon(Icons.keyboard_arrow_down),
                       enabledBorder: state.hasError
                           ? Theme.of(field.context)
                               .extension<FlFormFieldTheme>()

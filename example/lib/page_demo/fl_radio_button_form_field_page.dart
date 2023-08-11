@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:fl_form/formfield/fl_radio_button_form_field.dart';
 import 'package:flutter/material.dart';
 
@@ -36,6 +35,7 @@ class _FlRadioButtonFormFieldPageState
               autovalidateMode: AutovalidateMode.always,
               validator: (value) {
                 if (value == null) return 'Data invalid';
+                return null;
               },
               label: 'Select Item',
               options: const [

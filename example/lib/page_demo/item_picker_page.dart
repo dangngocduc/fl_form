@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:example/group_demo_widget.dart';
 import 'package:fl_form/formfield/single_item_picker_form_field.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +24,7 @@ class _ItemPickerPageState extends State<ItemPickerPage> {
                   label: 'Select Item',
                   placeholderText: 'Select Item',
                   contentSelectedBuilder: (data, context) => Text(
-                    '${data.toString()}',
+                    data.toString(),
                   ),
                   options: const [
                     'Afghanistan',
@@ -57,7 +56,7 @@ class _ItemPickerPageState extends State<ItemPickerPage> {
                           ),
                           Expanded(
                             child: Text(
-                              '${value.toString()}',
+                              value.toString(),
                             ),
                           ),
                           if (isSelected) const Icon(Icons.done)
@@ -65,21 +64,19 @@ class _ItemPickerPageState extends State<ItemPickerPage> {
                       ),
                     );
                   },
-                  contentSelectedBuilder: (data, context) => Container(
-                    child: Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 16,
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        Expanded(
-                            child: Text(
-                          '${data.toString()}',
-                        ))
-                      ],
-                    ),
+                  contentSelectedBuilder: (data, context) => Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 16,
+                      ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Expanded(
+                          child: Text(
+                        data.toString(),
+                      ))
+                    ],
                   ),
                   options: const [
                     'Afghanistan',
@@ -131,34 +128,32 @@ class _ItemPickerPageState extends State<ItemPickerPage> {
                       ),
                     );
                   },
-                  contentSelectedBuilder: (data, context) => Container(
-                    child: Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 16,
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        Expanded(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              data.title,
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                            const SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              data.subTitle,
-                              style: Theme.of(context).textTheme.labelMedium,
-                            ),
-                          ],
-                        ))
-                      ],
-                    ),
+                  contentSelectedBuilder: (data, context) => Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 16,
+                      ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Expanded(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            data.title,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          const SizedBox(
+                            height: 2,
+                          ),
+                          Text(
+                            data.subTitle,
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                        ],
+                      ))
+                    ],
                   ),
                   options: [
                     SimpleData(title: 'Title 1', subTitle: 'Sub title 1'),
@@ -231,21 +226,19 @@ class _ItemPickerPageState extends State<ItemPickerPage> {
                       ),
                     );
                   },
-                  contentSelectedBuilder: (data, context) => Container(
-                    child: Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 16,
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        Expanded(
-                            child: Text(
-                          data.toString(),
-                        ))
-                      ],
-                    ),
+                  contentSelectedBuilder: (data, context) => Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 16,
+                      ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Expanded(
+                          child: Text(
+                        data.toString(),
+                      ))
+                    ],
                   ),
                   options: const [
                     'Afghanistan',
@@ -301,34 +294,32 @@ class _ItemPickerPageState extends State<ItemPickerPage> {
                       ),
                     );
                   },
-                  contentSelectedBuilder: (data, context) => Container(
-                    child: Row(
-                      children: [
-                        const CircleAvatar(
-                          radius: 16,
-                        ),
-                        const SizedBox(
-                          width: 12,
-                        ),
-                        Expanded(
-                            child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              data.title,
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                            const SizedBox(
-                              height: 2,
-                            ),
-                            Text(
-                              data.subTitle,
-                              style: Theme.of(context).textTheme.labelMedium,
-                            ),
-                          ],
-                        ))
-                      ],
-                    ),
+                  contentSelectedBuilder: (data, context) => Row(
+                    children: [
+                      const CircleAvatar(
+                        radius: 16,
+                      ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Expanded(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            data.title,
+                            style: Theme.of(context).textTheme.bodyMedium,
+                          ),
+                          const SizedBox(
+                            height: 2,
+                          ),
+                          Text(
+                            data.subTitle,
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
+                        ],
+                      ))
+                    ],
                   ),
                   options: [
                     SimpleData(title: 'Title 1', subTitle: 'Sub title 1'),
