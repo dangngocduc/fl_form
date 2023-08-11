@@ -427,7 +427,7 @@ Example Area Text
 
 ### Radio Button Group FormField
 
-<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_radio_button_form_field.svg" width="50%"/>
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_radio_button_form_field.svg" width="100%"/>
 
 ```dart
     FlRadioButtonFormField(
