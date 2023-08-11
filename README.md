@@ -19,7 +19,7 @@ This package provide FormField for some data type on your application, it can wo
 
 FormFiel is required Application use ThemeExtension: **FlFormFieldTheme**
 
-#### 1, Configuration
+#### Configuration
 
 ```dart
     MaterialApp(
@@ -33,7 +33,7 @@ FormFiel is required Application use ThemeExtension: **FlFormFieldTheme**
     );
 ```
 
-#### 2, FlFormFieldTheme
+#### FlFormFieldTheme
 
 ```dart
 ...
@@ -57,7 +57,7 @@ FormFiel is required Application use ThemeExtension: **FlFormFieldTheme**
 
 ```
 
-### FlTextFormField
+### 📃 1, FlTextFormField
 
 <img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/textfield_guide.svg" width="100%"/>
 
