@@ -232,7 +232,7 @@ Example Area Text
 
 ### Bool Value FormField
 
-<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/bool_form_field_guide.svg" width="50%"/>
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/bool_form_field.svg" width="50%"/>
 
 #### 1, FlBoolFormField
 
