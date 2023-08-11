@@ -1,6 +1,7 @@
 ## Features
 
 ![Guide](/images/textfield_guide.svg){ width=100% }
+<img src="/images/textfield_guide.svg" width="100%"/>
 
 This package provide FormField for some data type on your application, it can work with Form on your application.
 
