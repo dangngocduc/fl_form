@@ -375,6 +375,8 @@ Example Area Text
 
 ### Multiple Item Picker Form Field
 
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/multiple_item_picker_form_field.svg" width="100%"/>
+
 ```dart
     MultipleItemPickerFormField<SimpleData>(
         label: 'Select Items customize',
