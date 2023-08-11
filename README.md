@@ -1,7 +1,10 @@
 ## Features
 
 <table width="100%">
-
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/single_item_picker_form_field.svg" /></td>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/multiple_item_picker_form_field.svg" /></td>
+  </tr>
   <tr>
     <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/textfield_guide.svg" /></td>
     <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_time_form_field_guide.svg" /></td>
