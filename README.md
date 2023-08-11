@@ -1,6 +1,22 @@
 ## Features
 
-<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/textfield_guide.svg" width="100%"/>
+<table width="100%">
+
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/textfield_guide.svg" /></td>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_time_form_field_guide.svg" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_radio_button_form_field.svg" /></td>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_checkbox_group_form_field.svg" /></td>
+  </tr>
+  <tr>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/bool_form_field.svg" /></td>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_time_form_field_guide.svg" /></td>
+  </tr>
+</table>
+
+
 
 This package provide FormField for some data type on your application, it can work with Form on your application.
 
