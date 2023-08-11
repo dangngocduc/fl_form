@@ -138,6 +138,8 @@ Example Area Text
 
 ### FlDateAndTimeFormField
 
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_time_form_field_guide.svg" width="100%"/>
+
 ```dart
     FlDateAndTimeFormField(
         firstDate: DateTime.now(),
