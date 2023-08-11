@@ -287,6 +287,10 @@ Example Area Text
 
 ### Single Item Picker Form Field
 
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/single_item_picker_form_field.svg" width="100%"/>
+
+
+
 ```dart
     SingleItemPickerFormField<SimpleData>(
         label: 'Select Item customize',
