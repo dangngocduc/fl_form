@@ -424,3 +424,24 @@ Example Area Text
         ],
     )
 ```
+
+### Radio Button Group FormField
+
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_radio_button_form_field.svg" width="50%"/>
+
+```dart
+    FlRadioButtonFormField(
+        isRequired: true,
+        autovalidateMode: AutovalidateMode.always,
+        validator: (value) {
+        if (value == null) return 'Data invalid';
+        return null;
+        },
+        label: 'Select Item',
+        options: const [
+        'Option 1',
+        'Option 2',
+        'Option 3',
+        ],
+    )
+```
