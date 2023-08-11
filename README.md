@@ -445,3 +445,27 @@ Example Area Text
         ],
     )
 ```
+
+### Checbox Group FormField
+
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_checkbox_group_form_field.svg" width="100%"/>
+
+```dart
+    FlCheckboxGroupFormField(
+        isRequired: true,
+        autovalidateMode: AutovalidateMode.always,
+        validator: (value) {
+        if (value == null || value.isEmpty) return 'Data invalid';
+        return null;
+        },
+        label: 'Select Item',
+        options: const [
+        'Item 1',
+        'Item 2',
+        'Item 3',
+        'Item 4',
+        'Item 5',
+        'Item 6',
+        ],
+    )
+```
