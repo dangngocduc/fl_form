@@ -1,6 +1,6 @@
 name: fl_form
 description: Flutter package support FormField for Text,Date, Bool, ItemPicker..
-version: 0.0.3
+version: 0.1.1
 homepage: https://github.com/dangngocduc/fl_form
 
 environment:
@@ -8,6 +8,7 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  async: ^2.11.0
   flutter:
     sdk: flutter
   image_picker: ^0.8.7+5

@@ -1,6 +1,6 @@
 ## Features
 
-<img src="/images/textfield_guide.svg" width="100%"/>
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/textfield_guide.svg" width="100%"/>
 
 This package provide FormField for some data type on your application, it can work with Form on your application.
 
@@ -15,7 +15,7 @@ This package provide FormField for some data type on your application, it can wo
 
 ## Usage
 
-### Require Theme Extension
+### ⚠️ ⚠️ ⚠️ Require Theme Extension ⚠️ ⚠️ ⚠️
 
 FormFiel is required Application use ThemeExtension: **FlFormFieldTheme**
 
@@ -59,7 +59,7 @@ FormFiel is required Application use ThemeExtension: **FlFormFieldTheme**
 
 ### FlTextFormField
 
-<img src="/images/textfield_guide.svg" width="100%"/>
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/textfield_guide.svg" width="100%"/>
 
 
 Example Simple Text
@@ -105,7 +105,7 @@ Example Area Text
 
 ### FlDateFormField
 
-<img src="/images/date_form_field_guide.svg" width="100%"/>
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_form_field_guide.svg" width="100%"/>
 
 
 ``` dart
