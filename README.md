@@ -232,6 +232,8 @@ Example Area Text
 
 ### Bool Value FormField
 
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_time_form_field_guide.svg" width="50%"/>
+
 #### 1, FlBoolFormField
 
 ```dart
