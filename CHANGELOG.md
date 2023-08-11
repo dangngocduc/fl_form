@@ -12,6 +12,6 @@
 
 ** UPDATE README
 
-## 0.2.0
+## 0.3.0
 
 ** UPDATE README

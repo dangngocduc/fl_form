@@ -1,5 +1,8 @@
 ## Features
 
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/COVER.png" width="100%" />
+
+
 <table width="100%">
   <tr>
     <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/single_item_picker_form_field.svg" /></td>
