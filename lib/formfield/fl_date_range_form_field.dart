@@ -7,9 +7,9 @@ import 'fl_form_field_theme.dart';
 class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
   FlDateRangeFormField({
     super.key,
-    Duration? initialValue,
-    FormFieldSetter<Duration>? onSaved,
-    FormFieldValidator<Duration>? validator,
+    Tuple2<DateTime, DateTime>? initialValue,
+    FormFieldSetter<Tuple2<DateTime, DateTime>>? onSaved,
+    FormFieldValidator<Tuple2<DateTime, DateTime>>? validator,
     AutovalidateMode? autovalidateMode,
     required String label,
     required String placeholderText,
@@ -17,6 +17,9 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
     bool isRequired = false,
     bool enabled = true,
   }) : super(
+          initialValue: initialValue,
+          onSaved: onSaved,
+          validator: validator,
           builder: (field) {
             String valueDisplay = '';
             if (field.value != null) {
