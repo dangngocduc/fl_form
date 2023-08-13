@@ -58,6 +58,9 @@ class FlTextFormField extends FormField<String> {
                   enabled: enabled,
                   maxLines: maxLines,
                   minLines: maxLines,
+                  onChanged: (value) {
+                    state.didChange(value);
+                  },
                   decoration: InputDecoration(
                     hintText: placeholderText,
                     prefixIcon: prefixIcon,
