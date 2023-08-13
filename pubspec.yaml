@@ -1,6 +1,6 @@
 name: fl_form
 description: FormField Flutter for Text, Date, Time, Date&Time, Boolean, Avatar, Item Picker, Radio Button, Checkbox group.
-version: 0.4.0
+version: 0.4.1
 homepage: https://github.com/dangngocduc/fl_form
 
 environment:

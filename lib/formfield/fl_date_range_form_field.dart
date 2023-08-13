@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:tuple/tuple.dart';
 
 import 'fl_form_field_theme.dart';
