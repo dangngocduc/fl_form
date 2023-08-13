@@ -4,8 +4,8 @@
     <img alt="Pub Package" src="https://img.shields.io/pub/v/fl_form.svg">
   </a>
   <br/>
-  <a href="https://github.com/dangngocduc/flutter_paging">
-    <img src="https://img.shields.io/github/stars/dangngocduc/flutter_paging.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on GitHub">
+  <a href="https://github.com/dangngocduc/fl_form">
+    <img src="https://img.shields.io/github/stars/dangngocduc/fl_form.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on GitHub">
   </a>
   <a href="https://github.com/tenhobi/effective_dart">
     <img alt="style: effective dart" src="https://img.shields.io/badge/style-effective_dart-40c4ff.svg">
