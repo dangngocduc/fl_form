@@ -16,6 +16,6 @@
 
 ** UPDATE README
 
-## 0.4.1
+## 0.4.2
 
 ** Hot fix TextFormField onChange

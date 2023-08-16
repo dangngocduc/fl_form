@@ -23,20 +23,20 @@
 
 <table width="100%">
   <tr>
-    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/single_item_picker_form_field.svg" /></td>
-    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/multiple_item_picker_form_field.svg" /></td>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/single_item_picker_form_field.png" /></td>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/multiple_item_picker_form_field.png" /></td>
   </tr>
   <tr>
-    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/textfield_guide.svg" /></td>
-    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_time_form_field_guide.svg" /></td>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/textfield_guide.png" /></td>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_time_form_field_guide.png" /></td>
   </tr>
   <tr>
-    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_radio_button_form_field.svg" /></td>
-    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_checkbox_group_form_field.svg" /></td>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_radio_button_form_field.png" /></td>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_checkbox_group_form_field.png" /></td>
   </tr>
   <tr>
-    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/bool_form_field.svg" /></td>
-    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_time_form_field_guide.svg" /></td>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/bool_form_field.png" /></td>
+    <td><img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_time_form_field_guide.png" /></td>
   </tr>
 </table>
 
@@ -99,7 +99,7 @@ FormFiel is required Application use ThemeExtension: **FlFormFieldTheme**
 
 ### 📃 1, FlTextFormField
 
-<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/textfield_guide.svg" width="100%"/>
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/textfield_guide.png" width="100%"/>
 
 
 Example Simple Text
@@ -145,7 +145,7 @@ Example Area Text
 
 ### FlDateFormField
 
-<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_form_field_guide.svg" width="100%"/>
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_form_field_guide.png" width="100%"/>
 
 
 ``` dart
@@ -178,7 +178,7 @@ Example Area Text
 
 ### FlDateAndTimeFormField
 
-<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_time_form_field_guide.svg" width="100%"/>
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_time_form_field_guide.png" width="100%"/>
 
 ```dart
     FlDateAndTimeFormField(
@@ -272,7 +272,7 @@ Example Area Text
 
 ### Bool Value FormField
 
-<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/bool_form_field.svg" width="50%"/>
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/bool_form_field.png" width="50%"/>
 
 #### 1, FlBoolFormField
 
@@ -311,7 +311,7 @@ Example Area Text
 
 ### Single Item Picker Form Field
 
-<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/single_item_picker_form_field.svg" width="100%"/>
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/single_item_picker_form_field.png" width="100%"/>
 
 
 
@@ -399,7 +399,7 @@ Example Area Text
 
 ### Multiple Item Picker Form Field
 
-<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/multiple_item_picker_form_field.svg" width="100%"/>
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/multiple_item_picker_form_field.png" width="100%"/>
 
 ```dart
     MultipleItemPickerFormField<SimpleData>(
@@ -473,7 +473,7 @@ Example Area Text
 
 ### Radio Button Group FormField
 
-<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_radio_button_form_field.svg" width="100%"/>
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_radio_button_form_field.png" width="100%"/>
 
 ```dart
     FlRadioButtonFormField(
@@ -494,7 +494,7 @@ Example Area Text
 
 ### Checbox Group FormField
 
-<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_checkbox_group_form_field.svg" width="100%"/>
+<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_checkbox_group_form_field.png" width="100%"/>
 
 ```dart
     FlCheckboxGroupFormField(
