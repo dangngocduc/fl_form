@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:fl_form/formfield/fl_text_form_field.dart';
 import 'package:fl_form/page/fl_button_state_async.dart';
 import 'package:fl_form/page/fl_form_body_state_async.dart';
@@ -18,13 +17,13 @@ class _FormDemoPage1State extends State<FormDemoPage1> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Form SignIn'),
+        title: const Text('Form SignIn'),
       ),
       body: FlFormBodyStateAsync(
         future: future,
         builder: (context) {
           return Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -33,7 +32,9 @@ class _FormDemoPage1State extends State<FormDemoPage1> {
                   label: 'Username',
                   placeholderText: 'Type username',
                   onSaved: (newValue) {},
-                  validator: (value) {},
+                  validator: (value) {
+                    return null;
+                  },
                 ),
                 const SizedBox(
                   height: 12,
@@ -43,7 +44,9 @@ class _FormDemoPage1State extends State<FormDemoPage1> {
                   isPassword: true,
                   placeholderText: 'Type pass',
                   onSaved: (newValue) {},
-                  validator: (value) {},
+                  validator: (value) {
+                    return null;
+                  },
                 ),
                 const SizedBox(
                   height: 12,
@@ -54,7 +57,7 @@ class _FormDemoPage1State extends State<FormDemoPage1> {
                     if (state == FlButtonState.enable) {
                       return ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            fixedSize: Size.fromHeight(56),
+                            fixedSize: const Size.fromHeight(56),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12))),
                         onPressed: () {
@@ -73,7 +76,7 @@ class _FormDemoPage1State extends State<FormDemoPage1> {
                       return ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                            fixedSize: Size.fromHeight(56),
+                            fixedSize: const Size.fromHeight(56),
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12))),
                         child: const CupertinoActivityIndicator(),

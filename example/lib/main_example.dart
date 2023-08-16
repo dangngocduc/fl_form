@@ -5,7 +5,6 @@ import 'package:example/page_demo/fl_checkbox_group_form_field_page.dart';
 import 'package:example/page_demo/fl_money_form_field_page.dart';
 import 'package:example/page_demo/fl_radio_button_form_field_page.dart';
 import 'package:example/page_demo/text_form_field_page.dart';
-import 'package:fl_form/formfield/fl_money_form_field.dart';
 import 'package:flutter/material.dart';
 
 import 'form/form_demo_page1.dart';

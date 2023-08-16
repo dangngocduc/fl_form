@@ -1,4 +1,3 @@
-import 'dart:developer' as developer;
 import 'package:fl_form/formfield/fl_money_form_field.dart';
 import 'package:flutter/material.dart';
 
