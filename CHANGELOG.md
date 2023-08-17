@@ -19,3 +19,7 @@
 ## 0.4.2
 
 ** Hot fix TextFormField onChange
+
+## 0.4.4
+
+** Fix issue Money Format

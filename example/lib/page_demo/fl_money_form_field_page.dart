@@ -18,6 +18,7 @@ class _FlMoneyFormFieldPageState extends State<FlMoneyFormFieldPage> {
         child: Column(
           children: [
             FlMoneyFormField(
+              initialValue: 12,
               label: 'Money',
               currency: 'VND',
               placeholderText: 'Type your money',

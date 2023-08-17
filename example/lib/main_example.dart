@@ -266,7 +266,7 @@ class MainExample extends StatelessWidget {
                   child: Row(
                     children: [
                       Expanded(
-                        child: Text('Demo Form 1'),
+                        child: Text('Demo Form Money'),
                       ),
                       Icon(Icons.keyboard_arrow_right_outlined)
                     ],
