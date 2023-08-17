@@ -1,3 +1,4 @@
+import 'package:example/page_demo/avatar_name_widget.dart';
 import 'package:fl_form/formfield/fl_checkbox_group_form_field.dart';
 import 'package:flutter/material.dart';
 
@@ -21,6 +22,27 @@ class _FlCheckBoxGroupFormFieldPageState
           children: [
             FlCheckboxGroupFormField(
               label: 'Select Item',
+              itemBuilder: (context, value, child) {
+                return Container(
+                  child: Row(
+                    children: [
+                      AvatarNameWidget(
+                        radius: 12,
+                        name: value,
+                      ),
+                      const SizedBox(
+                        width: 4,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [Text(value)],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
               options: const [
                 'Item 1',
                 'Item 2',
@@ -37,14 +59,45 @@ class _FlCheckBoxGroupFormFieldPageState
                 if (value == null || value.isEmpty) return 'Data invalid';
                 return null;
               },
+              itemBuilder: (context, value, child) {
+                return Container(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    children: [
+                      AvatarNameWidget(
+                        radius: 24,
+                        name: value,
+                      ),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Text(
+                              value,
+                              style: Theme.of(context).textTheme.titleMedium,
+                            ),
+                            Text(
+                              'dangngocduc.bk@gmail.com',
+                              style: Theme.of(context).textTheme.labelMedium,
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                );
+              },
               label: 'Select Item',
               options: const [
-                'Item 1',
-                'Item 2',
-                'Item 3',
-                'Item 4',
-                'Item 5',
-                'Item 6',
+                'Dang Ngoc Duc',
+                'Vu Manh Quang',
+                'Hoang Van Thai',
+                'Nguyẽn Quang Sang',
+                'Chu Ngoc Mai',
+                'Do Thu Giang',
               ],
             )
           ],

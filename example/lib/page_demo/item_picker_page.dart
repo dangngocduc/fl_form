@@ -2,6 +2,8 @@ import 'package:example/group_demo_widget.dart';
 import 'package:fl_form/formfield/single_item_picker_form_field.dart';
 import 'package:flutter/material.dart';
 
+import 'avatar_name_widget.dart';
+
 class ItemPickerPage extends StatefulWidget {
   const ItemPickerPage({Key? key}) : super(key: key);
 
@@ -48,8 +50,9 @@ class _ItemPickerPageState extends State<ItemPickerPage> {
                       ),
                       child: Row(
                         children: [
-                          const CircleAvatar(
+                          AvatarNameWidget(
                             radius: 24,
+                            name: value.toString(),
                           ),
                           const SizedBox(
                             width: 12,

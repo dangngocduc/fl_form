@@ -10,6 +10,7 @@ class FlCheckboxGroupFormField<T> extends FormField<List<T>> {
     FormFieldValidator<List<T>>? validator,
     List<T>? initialValue,
     required List<T> options,
+    required ValueWidgetBuilder<T> itemBuilder,
     AutovalidateMode? autovalidateMode,
     FormFieldSetter<List<T>>? onSaved,
     String? restorationId,
@@ -93,12 +94,8 @@ class FlCheckboxGroupFormField<T> extends FormField<List<T>> {
                               width: 4,
                             ),
                             Expanded(
-                                child: Text(
-                              e.toString(),
-                              style: Theme.of(field.context)
-                                  .extension<FlFormFieldTheme>()!
-                                  .style,
-                            ))
+                              child: itemBuilder(field.context, e, null),
+                            )
                           ],
                         );
                       })
