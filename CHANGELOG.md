@@ -23,3 +23,7 @@
 ## 0.4.4
 
 ** Fix issue Money Format
+
+## 0.4.5
+
+** Update params for FlTextFormField

@@ -18,6 +18,13 @@ class FlTextFormField extends FormField<String> {
     this.isPassword = false,
     int maxLines = 1,
     Widget? prefixIcon,
+    bool autofocus = false,
+    TextInputType? keyboardType,
+    Brightness? keyboardAppearance,
+    TextInputAction? textInputAction,
+    int? maxLength,
+    bool autocorrect = true,
+    bool enableSuggestions = true,
   }) : super(
           validator: validator,
           onSaved: onSaved,
@@ -58,6 +65,13 @@ class FlTextFormField extends FormField<String> {
                   enabled: enabled,
                   maxLines: maxLines,
                   minLines: maxLines,
+                  autofocus: autofocus,
+                  keyboardAppearance: keyboardAppearance,
+                  keyboardType: keyboardType,
+                  maxLength: maxLength,
+                  textInputAction: textInputAction,
+                  autocorrect: autocorrect,
+                  enableSuggestions: enableSuggestions,
                   onChanged: (value) {
                     state.didChange(value);
                   },
