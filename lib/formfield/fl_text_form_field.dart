@@ -75,6 +75,9 @@ class FlTextFormField extends FormField<String> {
                   onChanged: (value) {
                     state.didChange(value);
                   },
+                  style: Theme.of(field.context)
+                      .extension<FlFormFieldTheme>()
+                      ?.style,
                   decoration: InputDecoration(
                     hintText: placeholderText,
                     prefixIcon: prefixIcon,
