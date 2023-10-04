@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
+import 'dialog/fl_date_range_picker.dart';
+import 'dialog/fl_date_range_picker_dialog.dart';
 import 'fl_form_field_theme.dart';
 
 class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
@@ -56,13 +58,21 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
                     showDialog<DateTimeRange>(
                       context: field.context,
                       builder: (context) {
-                        return DateRangePickerDialog(
-                          firstDate: DateTime.now(),
-                          currentDate: DateTime.now(),
-                          lastDate: DateTime.now().add(
+                        return CalendarPopUp(
+                          initialStartDate: field.value?.item1,
+                          initialEndDate: field.value?.item2,
+                          maximumDate: DateTime.now().add(
                             const Duration(days: 90),
                           ),
+                          minimumDate: DateTime.now(),
                         );
+                        // return DateRangePickerDialog(
+                        //   firstDate: DateTime.now(),
+                        //   currentDate: DateTime.now(),
+                        //   lastDate: DateTime.now().add(
+                        //     const Duration(days: 90),
+                        //   ),
+                        // );
                       },
                     ).then((value) {
                       if (value != null) {
@@ -73,7 +83,6 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
                   child: InputDecorator(
                     decoration: InputDecoration(
                       hintText: placeholderText,
-                      prefixIcon: prefixIcon,
                       enabledBorder: field.hasError
                           ? Theme.of(field.context)
                               .extension<FlFormFieldTheme>()
@@ -96,15 +105,23 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
                             .extension<FlFormFieldTheme>()
                             ?.inputDecorationTheme ??
                         Theme.of(field.context).inputDecorationTheme),
-                    isEmpty: field.value == null,
-                    child: field.value == null
-                        ? null
-                        : Text(
-                            valueDisplay,
-                            style: Theme.of(field.context)
-                                .extension<FlFormFieldTheme>()
-                                ?.style,
-                          ),
+                    isEmpty: false,
+                    child: Row(
+                      children: [
+                        Expanded(
+                            child: DateInfo(
+                          icon: prefixIcon ?? SizedBox.shrink(),
+                          hint: 'Start date',
+                          dateTime: field.value?.item1,
+                        )),
+                        Expanded(
+                            child: DateInfo(
+                          icon: prefixIcon ?? SizedBox.shrink(),
+                          hint: 'End date',
+                          dateTime: field.value?.item2,
+                        )),
+                      ],
+                    ),
                   ),
                 ),
                 if (field.hasError)
@@ -131,4 +148,42 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
             );
           },
         );
+}
+
+class DateInfo extends StatelessWidget {
+  final String hint;
+  final DateTime? dateTime;
+  final Widget icon;
+
+  const DateInfo({
+    super.key,
+    required this.hint,
+    this.dateTime,
+    required this.icon,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        icon,
+        const SizedBox(
+          width: 8,
+        ),
+        Expanded(
+          child: dateTime == null
+              ? Text(
+                  hint,
+                  style: Theme.of(context)
+                      .extension<FlFormFieldTheme>()
+                      ?.placeHolderStyle,
+                )
+              : Text(
+                  MaterialLocalizations.of(context).formatMediumDate(dateTime!),
+                  style: Theme.of(context).extension<FlFormFieldTheme>()?.style,
+                ),
+        )
+      ],
+    );
+  }
 }

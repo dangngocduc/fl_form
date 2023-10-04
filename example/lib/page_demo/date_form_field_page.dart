@@ -1,5 +1,6 @@
 import 'package:fl_form/formfield/fl_date_and_time_form_field.dart';
 import 'package:fl_form/formfield/fl_date_form_field.dart';
+import 'package:fl_form/formfield/fl_date_range_form_field.dart';
 import 'package:fl_form/formfield/fl_duration_form_field.dart';
 import 'package:fl_form/formfield/fl_time_form_field.dart';
 import 'package:flutter/material.dart';
@@ -109,6 +110,19 @@ class DateFormFieldPage extends StatelessWidget {
                 FlDurationFormField(
                   prefixIcon: const Icon(Icons.date_range),
                   label: 'Select Duration',
+                  placeholderText: 'hh : mm',
+                ),
+              ],
+            ),
+            const SizedBox(
+              height: 32,
+            ),
+            GroupDemoWidget(
+              title: 'Date Range',
+              children: [
+                FlDateRangeFormField(
+                  prefixIcon: const Icon(Icons.date_range),
+                  label: 'Select Dates',
                   placeholderText: 'hh : mm',
                 ),
               ],

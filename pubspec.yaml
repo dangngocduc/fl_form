@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   async: ^2.11.0
+  calendar_date_picker2: ^0.5.3
   flutter:
     sdk: flutter
   image_picker: ^0.8.7+5
