@@ -4,6 +4,7 @@ import 'package:example/page_demo/date_form_field_page.dart';
 import 'package:example/page_demo/fl_checkbox_group_form_field_page.dart';
 import 'package:example/page_demo/fl_money_form_field_page.dart';
 import 'package:example/page_demo/fl_radio_button_form_field_page.dart';
+import 'package:example/page_demo/search_item_picker_page.dart';
 import 'package:example/page_demo/text_form_field_page.dart';
 import 'package:flutter/material.dart';
 
@@ -24,6 +25,31 @@ class MainExample extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Card(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return const SearchItemPickerPage();
+                    },
+                  ));
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text('Search Demo'),
+                      ),
+                      Icon(Icons.keyboard_arrow_right_outlined)
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Card(
