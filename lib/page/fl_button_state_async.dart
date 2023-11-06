@@ -41,7 +41,7 @@ class _FlButtonStateAsyncState extends State<FlButtonStateAsync> {
         });
       }));
     } else {
-      state = FlButtonState.enable;
+      state = widget.state;
     }
   }
 
@@ -51,7 +51,6 @@ class _FlButtonStateAsyncState extends State<FlButtonStateAsync> {
     if (cancelableCompleter != null && !cancelableCompleter!.isCompleted) {
       cancelableCompleter?.cancel();
     }
-    state = widget.state;
     startListent();
   }
 
