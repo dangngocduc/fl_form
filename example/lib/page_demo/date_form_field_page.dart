@@ -15,6 +15,7 @@ class DateFormFieldPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(),
       body: SingleChildScrollView(
+        padding: EdgeInsets.symmetric(vertical: 32),
         child: Column(
           children: [
             GroupDemoWidget(
@@ -121,7 +122,10 @@ class DateFormFieldPage extends StatelessWidget {
               title: 'Date Range',
               children: [
                 FlDateRangeFormField(
-                  prefixIcon: const Icon(Icons.date_range),
+                  prefixIcon: const Icon(
+                    Icons.date_range,
+                    size: 16,
+                  ),
                   label: 'Select Dates',
                   placeholderText: 'hh : mm',
                 ),

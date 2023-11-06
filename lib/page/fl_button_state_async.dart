@@ -7,10 +7,12 @@ typedef FlButtonStateBuilder = Widget Function(
 class FlButtonStateAsync extends StatefulWidget {
   final Future? future;
   final FlButtonStateBuilder builder;
+  final FlButtonState state;
   const FlButtonStateAsync({
     Key? key,
     required this.future,
     required this.builder,
+    this.state = FlButtonState.disable,
   }) : super(key: key);
 
   @override
@@ -18,13 +20,14 @@ class FlButtonStateAsync extends StatefulWidget {
 }
 
 class _FlButtonStateAsyncState extends State<FlButtonStateAsync> {
-  FlButtonState state = FlButtonState.enable;
+  late FlButtonState state;
 
   async.CancelableOperation? cancelableCompleter;
 
   @override
   void initState() {
     super.initState();
+    state = widget.state;
     startListent();
   }
 
@@ -48,6 +51,7 @@ class _FlButtonStateAsyncState extends State<FlButtonStateAsync> {
     if (cancelableCompleter != null && !cancelableCompleter!.isCompleted) {
       cancelableCompleter?.cancel();
     }
+    state = widget.state;
     startListent();
   }
 

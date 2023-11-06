@@ -107,6 +107,7 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
                         Theme.of(field.context).inputDecorationTheme),
                     isEmpty: false,
                     child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Expanded(
                             child: DateInfo(
@@ -114,6 +115,13 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
                           hint: 'Start date',
                           dateTime: field.value?.item1,
                         )),
+                        Container(
+                          height: 24,
+                          width: 1,
+                          margin: const EdgeInsets.symmetric(horizontal: 8)
+                              .copyWith(right: 16),
+                          color: Theme.of(field.context).dividerColor,
+                        ),
                         Expanded(
                             child: DateInfo(
                           icon: prefixIcon ?? SizedBox.shrink(),
@@ -180,7 +188,10 @@ class DateInfo extends StatelessWidget {
                 )
               : Text(
                   MaterialLocalizations.of(context).formatMediumDate(dateTime!),
-                  style: Theme.of(context).extension<FlFormFieldTheme>()?.style,
+                  style: Theme.of(context)
+                      .extension<FlFormFieldTheme>()
+                      ?.style
+                      .copyWith(height: 1),
                 ),
         )
       ],
