@@ -25,6 +25,7 @@ class FlTextFormField extends FormField<String> {
     int? maxLength,
     bool autocorrect = true,
     bool enableSuggestions = true,
+    Iterable<String>? autofillHints,
   }) : super(
           validator: validator,
           onSaved: onSaved,
@@ -72,6 +73,7 @@ class FlTextFormField extends FormField<String> {
                   textInputAction: textInputAction,
                   autocorrect: autocorrect,
                   enableSuggestions: enableSuggestions,
+                  autofillHints: autofillHints,
                   onChanged: (value) {
                     state.didChange(value);
                   },

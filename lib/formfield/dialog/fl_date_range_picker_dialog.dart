@@ -113,7 +113,7 @@ class _CalendarPopUpState extends State<CalendarPopUp>
                                           textAlign: TextAlign.left,
                                           style: Theme.of(context)
                                               .textTheme
-                                              .bodyText2),
+                                              .labelMedium),
                                       const SizedBox(
                                         height: 4,
                                       ),
@@ -124,7 +124,7 @@ class _CalendarPopUpState extends State<CalendarPopUp>
                                             : '--/-- ',
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyText1!
+                                            .bodyMedium!
                                             .copyWith(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold),
@@ -157,7 +157,7 @@ class _CalendarPopUpState extends State<CalendarPopUp>
                                             : '--/-- ',
                                         style: Theme.of(context)
                                             .textTheme
-                                            .bodyText1!
+                                            .bodyMedium!
                                             .copyWith(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold),

@@ -94,7 +94,7 @@ class _FlDateRangePickerState extends State<FlDateRangePicker> {
                           });
                         },
                         child: Icon(
-                          Icons.keyboard_arrow_left,
+                          Icons.keyboard_arrow_left_rounded,
                           color: Colors.grey,
                         ),
                       ),
@@ -105,7 +105,7 @@ class _FlDateRangePickerState extends State<FlDateRangePicker> {
                   child: Center(
                     child: Text(
                       DateFormat('MMMM').format(currentMonthDate),
-                      style: Theme.of(context).textTheme.headline6,
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
                   ),
                 ),
@@ -133,8 +133,8 @@ class _FlDateRangePickerState extends State<FlDateRangePicker> {
                             setListOfDate(currentMonthDate);
                           });
                         },
-                        child: Icon(
-                          Icons.keyboard_arrow_right,
+                        child: const Icon(
+                          Icons.keyboard_arrow_right_rounded,
                           color: Colors.grey,
                         ),
                       ),
@@ -296,26 +296,26 @@ class _FlDateRangePickerState extends State<FlDateRangePicker> {
                             child: Center(
                               child: Text(
                                 '${date.day}',
-                                style: TextStyle(
-                                    color: getIsItStartAndEndDate(date)
-                                        ? Colors.white
-                                        : currentMonthDate.month == date.month
-                                            ? Theme.of(context)
-                                                .textTheme
-                                                .bodyText1!
-                                                .color
-                                            : Theme.of(context)
-                                                .textTheme
-                                                .caption!
-                                                .color!
-                                                .withOpacity(0.4),
-                                    fontSize:
-                                        MediaQuery.of(context).size.width > 360
-                                            ? 18
-                                            : 16,
-                                    fontWeight: getIsItStartAndEndDate(date)
-                                        ? FontWeight.bold
-                                        : FontWeight.normal),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                        color: getIsItStartAndEndDate(date)
+                                            ? Colors.white
+                                            : currentMonthDate.month ==
+                                                    date.month
+                                                ? Theme.of(context)
+                                                    .textTheme
+                                                    .bodyText1!
+                                                    .color
+                                                : Theme.of(context)
+                                                    .textTheme
+                                                    .caption!
+                                                    .color!
+                                                    .withOpacity(0.4),
+                                        fontWeight: getIsItStartAndEndDate(date)
+                                            ? FontWeight.bold
+                                            : FontWeight.normal),
                               ),
                             ),
                           ),
