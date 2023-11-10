@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tuple/tuple.dart';
 
 import 'fl_form_field_theme.dart';
 
@@ -26,6 +27,8 @@ class FlTextFormField extends FormField<String> {
     bool autocorrect = true,
     bool enableSuggestions = true,
     Iterable<String>? autofillHints,
+    double? paddingLeftError,
+    Tuple2<Widget, Widget>? iconObscureText,
   }) : super(
           validator: validator,
           onSaved: onSaved,
@@ -89,8 +92,10 @@ class FlTextFormField extends FormField<String> {
                               state.toglgleShowPass();
                             },
                             child: state.obscureText
-                                ? const Icon(Icons.visibility_outlined)
-                                : const Icon(Icons.visibility_off_outlined),
+                                ? (iconObscureText?.item1 ??
+                                    const Icon(Icons.visibility_outlined))
+                                : (iconObscureText?.item2 ??
+                                    const Icon(Icons.visibility_off_outlined)),
                           )
                         : null,
                     enabledBorder: state.hasError
@@ -120,11 +125,12 @@ class FlTextFormField extends FormField<String> {
                   Padding(
                     padding: EdgeInsets.only(
                       top: 4,
-                      left: (Theme.of(field.context)
-                              .extension<FlFormFieldTheme>()
-                              ?.inputDecorationTheme
-                              .contentPadding as EdgeInsets)
-                          .left,
+                      left: paddingLeftError ??
+                          (Theme.of(field.context)
+                                  .extension<FlFormFieldTheme>()
+                                  ?.inputDecorationTheme
+                                  .contentPadding as EdgeInsets)
+                              .left,
                     ),
                     child: RichText(
                       text: TextSpan(

@@ -11,12 +11,17 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
     Tuple2<DateTime, DateTime>? initialValue,
     FormFieldSetter<Tuple2<DateTime, DateTime>>? onSaved,
     FormFieldValidator<Tuple2<DateTime, DateTime>>? validator,
+    EdgeInsetsGeometry? contentPadding,
     AutovalidateMode? autovalidateMode,
     required String label,
     required String placeholderText,
     Widget? prefixIcon,
     bool isRequired = false,
     bool enabled = true,
+    String fromText = 'From',
+    String textSelectDate = 'Select dates',
+    String textSelectEndDate = 'Select end date',
+    String toText = 'To',
   }) : super(
           initialValue: initialValue,
           onSaved: onSaved,
@@ -64,6 +69,10 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
                           maximumDate: DateTime.now().add(
                             const Duration(days: 90),
                           ),
+                          textSelectDate: textSelectDate,
+                          textSelectEndDate: textSelectEndDate,
+                          fromText: fromText,
+                          toText: toText,
                           minimumDate: DateTime.now(),
                         );
                         // return DateRangePickerDialog(
@@ -82,6 +91,7 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
                   },
                   child: InputDecorator(
                     decoration: InputDecoration(
+                      contentPadding: contentPadding,
                       hintText: placeholderText,
                       enabledBorder: field.hasError
                           ? Theme.of(field.context)
@@ -116,8 +126,8 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
                           dateTime: field.value?.item1,
                         )),
                         Container(
-                          height: 24,
-                          width: 1,
+                          height: 16,
+                          width: 2,
                           margin: const EdgeInsets.symmetric(horizontal: 8)
                               .copyWith(right: 16),
                           color: Theme.of(field.context).dividerColor,
@@ -174,9 +184,10 @@ class DateInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        icon,
-        const SizedBox(
-          width: 8,
+        Container(
+          width: 48,
+          child: icon,
+          alignment: Alignment.center,
         ),
         Expanded(
           child: dateTime == null

@@ -13,6 +13,10 @@ class CalendarPopUp extends StatefulWidget {
       this.onCancelClick,
       this.barrierDismissible = true,
       this.minimumDate,
+      required this.fromText,
+      required this.toText,
+      required this.textSelectDate,
+      required this.textSelectEndDate,
       this.maximumDate})
       : super(key: key);
 
@@ -21,6 +25,10 @@ class CalendarPopUp extends StatefulWidget {
   final bool barrierDismissible;
   final DateTime? initialStartDate;
   final DateTime? initialEndDate;
+  final String fromText;
+  final String toText;
+  final String textSelectDate;
+  final String textSelectEndDate;
   final Function(DateTime, DateTime)? onApplyClick;
 
   final Function()? onCancelClick;
@@ -101,6 +109,7 @@ class _CalendarPopUpState extends State<CalendarPopUp>
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           mainAxisSize: MainAxisSize.min,
                           children: <Widget>[
+                            /*
                             Row(
                               children: <Widget>[
                                 Expanded(
@@ -109,11 +118,13 @@ class _CalendarPopUpState extends State<CalendarPopUp>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: <Widget>[
-                                      Text('From',
-                                          textAlign: TextAlign.left,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .labelMedium),
+                                      Text(
+                                        widget.fromText,
+                                        textAlign: TextAlign.left,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium,
+                                      ),
                                       const SizedBox(
                                         height: 4,
                                       ),
@@ -121,7 +132,7 @@ class _CalendarPopUpState extends State<CalendarPopUp>
                                         startDate != null
                                             ? DateFormat('EEE, dd MMM')
                                                 .format(startDate!)
-                                            : '--/-- ',
+                                            : '__/__',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium!
@@ -143,10 +154,12 @@ class _CalendarPopUpState extends State<CalendarPopUp>
                                     crossAxisAlignment:
                                         CrossAxisAlignment.center,
                                     children: <Widget>[
-                                      Text('To',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText2),
+                                      Text(
+                                        widget.toText,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .labelMedium,
+                                      ),
                                       const SizedBox(
                                         height: 4,
                                       ),
@@ -154,7 +167,7 @@ class _CalendarPopUpState extends State<CalendarPopUp>
                                         endDate != null
                                             ? DateFormat('EEE, dd MMM')
                                                 .format(endDate!)
-                                            : '--/-- ',
+                                            : '__/__',
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium!
@@ -170,11 +183,14 @@ class _CalendarPopUpState extends State<CalendarPopUp>
                             const Divider(
                               height: 1,
                             ),
+                            */
                             FlDateRangePicker(
                               minimumDate: widget.minimumDate,
                               maximumDate: widget.maximumDate,
                               initialEndDate: widget.initialEndDate,
                               initialStartDate: widget.initialStartDate,
+                              textSelectDate: widget.textSelectDate,
+                              textSelectEndDate: widget.textSelectEndDate,
                               startEndDateChange: (DateTime? startDateData,
                                   DateTime? endDateData) {
                                 setState(() {
@@ -185,8 +201,8 @@ class _CalendarPopUpState extends State<CalendarPopUp>
                             ),
                             Padding(
                               padding: const EdgeInsets.only(
-                                  left: 16, right: 16, bottom: 16, top: 8),
-                              child: ElevatedButton(
+                                  left: 16, right: 16, bottom: 0, top: 0),
+                              child: TextButton(
                                 onPressed: () {
                                   if (startDate != null && endDate != null) {
                                     Navigator.pop(

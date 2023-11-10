@@ -3,14 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class FlDateRangePicker extends StatefulWidget {
-  const FlDateRangePicker(
-      {Key? key,
-      this.initialStartDate,
-      this.initialEndDate,
-      this.startEndDateChange,
-      this.minimumDate,
-      this.maximumDate})
-      : super(key: key);
+  const FlDateRangePicker({
+    Key? key,
+    this.initialStartDate,
+    this.initialEndDate,
+    this.startEndDateChange,
+    this.minimumDate,
+    required this.textSelectDate,
+    required this.textSelectEndDate,
+    this.maximumDate,
+  }) : super(key: key);
+  final String textSelectDate;
+  final String textSelectEndDate;
   final DateTime? minimumDate;
   final DateTime? maximumDate;
   final DateTime? initialStartDate;
@@ -27,6 +31,60 @@ class _FlDateRangePickerState extends State<FlDateRangePicker> {
   DateTime currentMonthDate = DateTime.now();
   DateTime? startDate;
   DateTime? endDate;
+
+  Widget getDateSelectedWidget() {
+    if (startDate == null && endDate == null) {
+      return Text(
+        widget.textSelectDate,
+        style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              color: Theme.of(context).colorScheme.error,
+              fontWeight: FontWeight.w700,
+            ),
+      );
+    } else {
+      DateFormat dateFormat = DateFormat.MMMd();
+      if (endDate == null) {
+        return RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: '${dateFormat.format(startDate!)} - ',
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+              TextSpan(
+                text: widget.textSelectEndDate,
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: Theme.of(context).colorScheme.error,
+                    ),
+              ),
+            ],
+          ),
+        );
+      } else {
+        return RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: '${dateFormat.format(startDate!)} - ',
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+              TextSpan(
+                text: dateFormat.format(endDate!),
+                style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+  }
 
   @override
   void initState() {
@@ -65,79 +123,54 @@ class _FlDateRangePickerState extends State<FlDateRangePicker> {
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Padding(
-            padding:
-                const EdgeInsets.only(left: 8.0, right: 8.0, top: 4, bottom: 4),
+            padding: const EdgeInsets.only(
+                left: 8.0, right: 8.0, top: 4, bottom: 12),
             child: Row(
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 38,
-                    width: 38,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(24.0)),
-                      border: Border.all(
-                        color: Theme.of(context).dividerColor,
-                      ),
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(24.0)),
-                        onTap: () {
-                          setState(() {
-                            currentMonthDate = DateTime(currentMonthDate.year,
-                                currentMonthDate.month, 0);
-                            setListOfDate(currentMonthDate);
-                          });
-                        },
-                        child: Icon(
-                          Icons.keyboard_arrow_left_rounded,
-                          color: Colors.grey,
-                        ),
-                      ),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+                    onTap: () {
+                      setState(() {
+                        currentMonthDate = DateTime(
+                            currentMonthDate.year, currentMonthDate.month, 0);
+                        setListOfDate(currentMonthDate);
+                      });
+                    },
+                    child: const Icon(
+                      Icons.arrow_left_rounded,
+                      color: Colors.grey,
                     ),
                   ),
                 ),
                 Expanded(
-                  child: Center(
-                    child: Text(
-                      DateFormat('MMMM').format(currentMonthDate),
-                      style: Theme.of(context).textTheme.titleMedium,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 38,
-                    width: 38,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          const BorderRadius.all(Radius.circular(24.0)),
-                      border: Border.all(
-                        color: Theme.of(context).dividerColor,
-                      ),
-                    ),
-                    child: Material(
-                      color: Colors.transparent,
-                      child: InkWell(
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(24.0)),
-                        onTap: () {
-                          setState(() {
-                            currentMonthDate = DateTime(currentMonthDate.year,
-                                currentMonthDate.month + 2, 0);
-                            setListOfDate(currentMonthDate);
-                          });
-                        },
-                        child: const Icon(
-                          Icons.keyboard_arrow_right_rounded,
-                          color: Colors.grey,
+                  child: Column(
+                    children: [
+                      Center(
+                        child: Text(
+                          DateFormat('MMMM').format(currentMonthDate),
+                          style: Theme.of(context).textTheme.bodyLarge,
                         ),
                       ),
+                      getDateSelectedWidget()
+                    ],
+                  ),
+                ),
+                Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: const BorderRadius.all(Radius.circular(24.0)),
+                    onTap: () {
+                      setState(() {
+                        currentMonthDate = DateTime(currentMonthDate.year,
+                            currentMonthDate.month + 2, 0);
+                        setListOfDate(currentMonthDate);
+                      });
+                    },
+                    child: const Icon(
+                      Icons.arrow_right_rounded,
+                      color: Colors.grey,
                     ),
                   ),
                 ),
@@ -170,7 +203,7 @@ class _FlDateRangePickerState extends State<FlDateRangePicker> {
           child: Center(
             child: Text(
               DateFormat('EEE').format(dateList[i]),
-              style: Theme.of(context).textTheme.bodyMedium,
+              style: Theme.of(context).textTheme.labelSmall,
             ),
           ),
         ),
@@ -298,7 +331,7 @@ class _FlDateRangePickerState extends State<FlDateRangePicker> {
                                 '${date.day}',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyMedium!
+                                    .labelLarge!
                                     .copyWith(
                                         color: getIsItStartAndEndDate(date)
                                             ? Colors.white
@@ -306,13 +339,13 @@ class _FlDateRangePickerState extends State<FlDateRangePicker> {
                                                     date.month
                                                 ? Theme.of(context)
                                                     .textTheme
-                                                    .bodyText1!
+                                                    .labelLarge!
                                                     .color
                                                 : Theme.of(context)
                                                     .textTheme
-                                                    .caption!
+                                                    .labelLarge!
                                                     .color!
-                                                    .withOpacity(0.4),
+                                                    .withOpacity(0.2),
                                         fontWeight: getIsItStartAndEndDate(date)
                                             ? FontWeight.bold
                                             : FontWeight.normal),

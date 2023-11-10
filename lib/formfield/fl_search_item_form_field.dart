@@ -1,6 +1,7 @@
 import 'package:fl_form/formfield/bottom_sheet/item_picker_default_widget.dart';
 import 'package:fl_form/formfield/bottom_sheet/single_item_picker_bottom_sheet.dart';
 import 'package:fl_form/formfield/dialog/fl_search_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'fl_form_field_theme.dart';
@@ -19,6 +20,7 @@ class FlSearchItemFormField<T> extends FormField<T> {
     FormFieldValidator<T>? validator,
     FormFieldSetter<T>? onSaved,
     AutovalidateMode? autovalidateMode,
+    EdgeInsetsGeometry? contentPadding,
     bool enabled = true,
     T? initialValue,
     required this.onSearch,
@@ -78,13 +80,15 @@ class FlSearchItemFormField<T> extends FormField<T> {
                   child: InputDecorator(
                     decoration: InputDecoration(
                       hintText: placeholderText,
+                      contentPadding: contentPadding,
                       prefixIcon: prefixIcon,
                       suffixIcon: field.value != null
                           ? GestureDetector(
                               onTap: () {
                                 field.didChange(null);
                               },
-                              child: const Icon(Icons.clear_outlined))
+                              child: const Icon(
+                                  CupertinoIcons.clear_circled_solid))
                           : null,
                       enabledBorder: state.hasError
                           ? Theme.of(field.context)
