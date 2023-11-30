@@ -80,12 +80,24 @@ class FlTextFormField extends FormField<String> {
                   onChanged: (value) {
                     state.didChange(value);
                   },
-                  style: Theme.of(field.context)
-                      .extension<FlFormFieldTheme>()
-                      ?.style,
+                  style: enabled
+                      ? Theme.of(field.context)
+                          .extension<FlFormFieldTheme>()
+                          ?.style
+                      : Theme.of(field.context)
+                          .extension<FlFormFieldTheme>()
+                          ?.disableStyle,
                   decoration: InputDecoration(
                     hintText: placeholderText,
                     prefixIcon: prefixIcon,
+                    fillColor: enabled
+                        ? Theme.of(field.context)
+                            .extension<FlFormFieldTheme>()
+                            ?.inputDecorationTheme
+                            .fillColor
+                        : Theme.of(field.context)
+                            .extension<FlFormFieldTheme>()
+                            ?.fillColorDisable,
                     suffixIcon: isPassword
                         ? GestureDetector(
                             onTap: () {
