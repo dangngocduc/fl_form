@@ -110,6 +110,10 @@ class FlTextFormField extends FormField<String> {
                             ?.inputDecorationTheme
                             .focusedErrorBorder
                         : null,
+                    disabledBorder: Theme.of(field.context)
+                        .extension<FlFormFieldTheme>()
+                        ?.inputDecorationTheme
+                        .disabledBorder,
                     border: state.hasError
                         ? Theme.of(field.context)
                             .extension<FlFormFieldTheme>()
