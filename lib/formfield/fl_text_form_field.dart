@@ -11,6 +11,7 @@ class FlTextFormField extends FormField<String> {
     required String placeholderText,
     bool isRequired = false,
     FormFieldValidator<String>? validator,
+    ValueChanged<String>? onChanged,
     String? initialValue,
     AutovalidateMode? autovalidateMode,
     FormFieldSetter<String>? onSaved,
@@ -78,6 +79,7 @@ class FlTextFormField extends FormField<String> {
                   enableSuggestions: enableSuggestions,
                   autofillHints: autofillHints,
                   onChanged: (value) {
+                    onChanged?.call(value);
                     state.didChange(value);
                   },
                   style: enabled
