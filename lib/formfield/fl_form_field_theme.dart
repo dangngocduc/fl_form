@@ -20,7 +20,7 @@ class FlFormFieldTheme extends ThemeExtension<FlFormFieldTheme> {
   });
 
   factory FlFormFieldTheme.dark(BuildContext context) {
-    var radius = 4.0;
+    var radius = 6.0;
     return FlFormFieldTheme(
       fillColorDisable: Colors.black,
       style: const TextStyle(fontSize: 16, color: Colors.white),
@@ -57,9 +57,62 @@ class FlFormFieldTheme extends ThemeExtension<FlFormFieldTheme> {
     );
   }
 
+  factory FlFormFieldTheme.light(BuildContext context) {
+    var radius = 6.0;
+    return FlFormFieldTheme(
+      fillColorDisable: Colors.grey[200]!,
+      style: const TextStyle(fontSize: 16, color: Colors.black87),
+      disableStyle: const TextStyle(fontSize: 16, color: Colors.grey),
+      errorStyle: const TextStyle(fontSize: 12, color: Colors.red),
+      placeHolderStyle: const TextStyle(
+          fontSize: 16, color: Colors.grey, fontWeight: FontWeight.w300),
+      labelStyle: const TextStyle(fontSize: 12, color: Colors.black87),
+      inputDecorationTheme: InputDecorationTheme(
+        hintStyle: const TextStyle(
+            fontSize: 16, color: Colors.grey, fontWeight: FontWeight.w300),
+        contentPadding:
+            const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(radius),
+            borderSide: Divider.createBorderSide(context, color: Colors.grey)),
+        errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(radius),
+            borderSide: Divider.createBorderSide(context, color: Colors.red)),
+        focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(radius),
+            borderSide: Divider.createBorderSide(context, color: Colors.red)),
+        enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(radius),
+            borderSide: Divider.createBorderSide(context, color: Colors.grey)),
+        focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(radius),
+            borderSide:
+                Divider.createBorderSide(context, color: Colors.black87)),
+        outlineBorder: Divider.createBorderSide(context),
+        activeIndicatorBorder: Divider.createBorderSide(context),
+      ),
+    );
+  }
+
   @override
-  ThemeExtension<FlFormFieldTheme> copyWith() {
-    return this;
+  ThemeExtension<FlFormFieldTheme> copyWith({
+    TextStyle? labelStyle,
+    InputDecorationTheme? inputDecorationTheme,
+    TextStyle? style,
+    TextStyle? disableStyle,
+    TextStyle? errorStyle,
+    TextStyle? placeHolderStyle,
+    Color? fillColorDisable,
+  }) {
+    return FlFormFieldTheme(
+      disableStyle: disableStyle ?? this.disableStyle,
+      errorStyle: errorStyle ?? this.errorStyle,
+      fillColorDisable: fillColorDisable ?? this.fillColorDisable,
+      inputDecorationTheme: inputDecorationTheme ?? this.inputDecorationTheme,
+      labelStyle: labelStyle ?? this.labelStyle,
+      placeHolderStyle: placeHolderStyle ?? this.placeHolderStyle,
+      style: style ?? this.style,
+    );
   }
 
   @override
