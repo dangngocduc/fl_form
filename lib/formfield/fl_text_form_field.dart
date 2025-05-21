@@ -3,6 +3,9 @@ import 'package:tuple/tuple.dart';
 
 import 'fl_form_field_theme.dart';
 
+typedef ErrorBuilder = Widget Function(
+    BuildContext context, String errorText, FlTextFormFieldState state);
+
 class FlTextFormField extends FormField<String> {
   final bool isPassword;
   FlTextFormField({
@@ -30,6 +33,8 @@ class FlTextFormField extends FormField<String> {
     Iterable<String>? autofillHints,
     double? paddingLeftError,
     Tuple2<Widget, Widget>? iconObscureText,
+    ErrorBuilder? errorBuilder,
+    
   }) : super(
           validator: validator,
           onSaved: onSaved,
@@ -140,6 +145,9 @@ class FlTextFormField extends FormField<String> {
                       Theme.of(field.context).inputDecorationTheme),
                 ),
                 if (state.hasError)
+                  errorBuilder != null
+                      ? errorBuilder(field.context, state.errorText!, state)
+                      :
                   Padding(
                     padding: EdgeInsets.only(
                       top: 4,
