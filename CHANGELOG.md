@@ -27,3 +27,8 @@
 ## 0.4.5
 
 ** Update params for FlTextFormField
+
+## 0.5.3
+
+** Introducing FLPasswordFormField
+** placeholderText is now optional

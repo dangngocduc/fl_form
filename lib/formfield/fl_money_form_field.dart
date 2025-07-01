@@ -1,8 +1,9 @@
+import 'dart:developer' as developer;
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'fl_form_field_theme.dart';
-import 'dart:developer' as developer;
 
 class FlMoneyFormField extends FormField<double> {
   FlMoneyFormField({
@@ -13,149 +14,105 @@ class FlMoneyFormField extends FormField<double> {
     AutovalidateMode? autovalidateMode,
     required String currency,
     required String label,
-    required String placeholderText,
+    String? placeholderText,
     Widget? prefixIcon,
     bool isRequired = false,
     bool enabled = true,
   }) : super(
-          initialValue: initialValue,
-          onSaved: onSaved,
-          validator: validator,
-          autovalidateMode: autovalidateMode,
-          enabled: enabled,
-          builder: (field) {
-            final state = field as _FlMoneyFormFieldState;
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 4),
-                  child: RichText(
-                    text: TextSpan(
-                        style: Theme.of(state.context)
-                            .extension<FlFormFieldTheme>()
-                            ?.labelStyle,
-                        children: [
-                          TextSpan(text: label),
-                          if (isRequired)
-                            TextSpan(
-                              text: ' *',
-                              style: Theme.of(state.context)
-                                  .extension<FlFormFieldTheme>()
-                                  ?.labelStyle
-                                  .copyWith(color: Colors.red),
-                            ),
-                        ]),
-                  ),
-                ),
-                InputDecorator(
-                  decoration: InputDecoration(
-                          hintText: placeholderText,
-                          prefixIcon: prefixIcon,
-                          enabledBorder: state.hasError
-                              ? Theme.of(state.context)
-                                  .extension<FlFormFieldTheme>()
-                                  ?.inputDecorationTheme
-                                  .errorBorder
-                              : null,
-                          focusedBorder: state.hasError
-                              ? Theme.of(state.context)
-                                  .extension<FlFormFieldTheme>()
-                                  ?.inputDecorationTheme
-                                  .focusedErrorBorder
-                              : null,
-                          border: state.hasError
-                              ? Theme.of(state.context)
-                                  .extension<FlFormFieldTheme>()
-                                  ?.inputDecorationTheme
-                                  .errorBorder
-                              : null,
-                          contentPadding: EdgeInsets.zero)
-                      .applyDefaults(Theme.of(state.context)
-                              .extension<FlFormFieldTheme>()
-                              ?.inputDecorationTheme ??
-                          Theme.of(state.context).inputDecorationTheme),
-                  isEmpty: false,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextField(
-                          onChanged: (value) {
-                            if (value.isNotEmpty) {
-                              var moneyText = value.replaceAll(',', '');
+         initialValue: initialValue,
+         onSaved: onSaved,
+         validator: validator,
+         autovalidateMode: autovalidateMode,
+         enabled: enabled,
+         builder: (field) {
+           final state = field as _FlMoneyFormFieldState;
+           return Column(
+             crossAxisAlignment: CrossAxisAlignment.stretch,
+             children: [
+               Padding(
+                 padding: const EdgeInsets.only(bottom: 4),
+                 child: RichText(
+                   text: TextSpan(
+                     style: Theme.of(state.context).extension<FlFormFieldTheme>()?.labelStyle,
+                     children: [
+                       TextSpan(text: label),
+                       if (isRequired)
+                         TextSpan(
+                           text: ' *',
+                           style: Theme.of(state.context).extension<FlFormFieldTheme>()?.labelStyle.copyWith(color: Colors.red),
+                         ),
+                     ],
+                   ),
+                 ),
+               ),
+               InputDecorator(
+                 decoration: InputDecoration(
+                   hintText: placeholderText,
+                   prefixIcon: prefixIcon,
+                   enabledBorder: state.hasError ? Theme.of(state.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
+                   focusedBorder: state.hasError ? Theme.of(state.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.focusedErrorBorder : null,
+                   border: state.hasError ? Theme.of(state.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
+                   contentPadding: EdgeInsets.zero,
+                 ).applyDefaults(Theme.of(state.context).extension<FlFormFieldTheme>()?.inputDecorationTheme ?? Theme.of(state.context).inputDecorationTheme),
+                 isEmpty: false,
+                 child: Row(
+                   children: [
+                     Expanded(
+                       child: TextField(
+                         onChanged: (value) {
+                           if (value.isNotEmpty) {
+                             var moneyText = value.replaceAll(',', '');
 
-                              if (moneyText.endsWith('.')) {
-                                moneyText = moneyText.replaceAll('.', '');
-                              }
+                             if (moneyText.endsWith('.')) {
+                               moneyText = moneyText.replaceAll('.', '');
+                             }
 
-                              if (moneyText.isNotEmpty) {
-                                state
-                                    .didChange(double.tryParse(moneyText) ?? 0);
-                              }
-                            }
-                          },
-                          keyboardType: TextInputType.number,
-                          controller: state.controller,
-                          style: Theme.of(state.context)
-                              .extension<FlFormFieldTheme>()!
-                              .style,
-                          decoration: InputDecoration(
-                            contentPadding: Theme.of(state.context)
-                                .extension<FlFormFieldTheme>()
-                                ?.inputDecorationTheme
-                                .contentPadding,
-                            hintText: placeholderText,
-                            hintStyle: Theme.of(state.context)
-                                .extension<FlFormFieldTheme>()!
-                                .placeHolderStyle,
-                            border: InputBorder.none,
-                            focusedBorder: InputBorder.none,
-                            errorBorder: InputBorder.none,
-                            enabledBorder: InputBorder.none,
-                            disabledBorder: InputBorder.none,
-                            focusedErrorBorder: InputBorder.none,
-                          ),
-                        ),
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                            border: Border(
-                                left: Divider.createBorderSide(state.context))),
-                        child: Text(
-                          currency,
-                          style: Theme.of(state.context)
-                              .extension<FlFormFieldTheme>()!
-                              .style,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                if (state.hasError)
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: 4,
-                      left: (Theme.of(state.context)
-                              .extension<FlFormFieldTheme>()
-                              ?.inputDecorationTheme
-                              .contentPadding as EdgeInsets)
-                          .left,
-                    ),
-                    child: RichText(
-                      text: TextSpan(
-                          style: Theme.of(state.context)
-                              .extension<FlFormFieldTheme>()
-                              ?.errorStyle,
-                          children: [
-                            TextSpan(text: state.errorText),
-                          ]),
-                    ),
-                  ),
-              ],
-            );
-          },
-        );
+                             if (moneyText.isNotEmpty) {
+                               state.didChange(double.tryParse(moneyText) ?? 0);
+                             }
+                           }
+                         },
+                         keyboardType: TextInputType.number,
+                         controller: state.controller,
+                         style: Theme.of(state.context).extension<FlFormFieldTheme>()!.style,
+                         decoration: InputDecoration(
+                           contentPadding: Theme.of(state.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.contentPadding,
+                           hintText: placeholderText,
+                           hintStyle: Theme.of(state.context).extension<FlFormFieldTheme>()!.placeHolderStyle,
+                           border: InputBorder.none,
+                           focusedBorder: InputBorder.none,
+                           errorBorder: InputBorder.none,
+                           enabledBorder: InputBorder.none,
+                           disabledBorder: InputBorder.none,
+                           focusedErrorBorder: InputBorder.none,
+                         ),
+                       ),
+                     ),
+                     Container(
+                       padding: const EdgeInsets.symmetric(horizontal: 12),
+                       decoration: BoxDecoration(border: Border(left: Divider.createBorderSide(state.context))),
+                       child: Text(currency, style: Theme.of(state.context).extension<FlFormFieldTheme>()!.style),
+                     ),
+                   ],
+                 ),
+               ),
+               if (state.hasError)
+                 Padding(
+                   padding: EdgeInsets.only(
+                     top: 4,
+                     left: (Theme.of(state.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.contentPadding as EdgeInsets).left,
+                   ),
+                   child: RichText(
+                     text: TextSpan(
+                       style: Theme.of(state.context).extension<FlFormFieldTheme>()?.errorStyle,
+                       children: [TextSpan(text: state.errorText)],
+                     ),
+                   ),
+                 ),
+             ],
+           );
+         },
+       );
 
   @override
   FormFieldState<double> createState() {
@@ -189,9 +146,7 @@ class FlMoneyTextController extends TextEditingController {
       // var previous = this._lastUpdatedText;
       updateText(text);
     });
-    developer.log(
-        'NumberFormat.decimalPattern().format(value) ${NumberFormat.decimalPattern().format(value)}',
-        name: 'FlMoneyFormField');
+    developer.log('NumberFormat.decimalPattern().format(value) ${NumberFormat.decimalPattern().format(value)}', name: 'FlMoneyFormField');
     text = NumberFormat.decimalPattern().format(value);
     updateText(text);
   }
@@ -227,13 +182,10 @@ class FlMoneyTextController extends TextEditingController {
     if (newText.contains('.')) {
       final first = newText.split('.').first;
       final sencond = newText.split('.')[1];
-      this.text =
-          '${NumberFormat.decimalPattern().format(int.parse(first))}.$sencond';
+      this.text = '${NumberFormat.decimalPattern().format(int.parse(first))}.$sencond';
     } else {
       if (newText.isNotEmpty) {
-        developer.log(
-            'NumberFormat().format(int.parse(text)) ${NumberFormat.decimalPattern().format(int.parse(newText))}',
-            name: 'FlMoneyFormField');
+        developer.log('NumberFormat().format(int.parse(text)) ${NumberFormat.decimalPattern().format(int.parse(newText))}', name: 'FlMoneyFormField');
         this.text = NumberFormat.decimalPattern().format(int.parse(newText));
       } else {
         this.text = newText;
