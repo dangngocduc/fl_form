@@ -1,4 +1,6 @@
-import 'package:fl_form/formfield/fl_text_form_field.dart';
+import 'dart:math';
+
+import 'package:fl_form/fl_form.dart';
 import 'package:fl_form/page/fl_button_state_async.dart';
 import 'package:fl_form/page/fl_form_body_state_async.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +14,9 @@ class FormDemoPage1 extends StatefulWidget {
 }
 
 class _FormDemoPage1State extends State<FormDemoPage1> {
+  bool _obscureText = true;
+  final TextEditingController _pwController = TextEditingController();
+
   Future? future;
   @override
   Widget build(BuildContext context) {
@@ -39,14 +44,27 @@ class _FormDemoPage1State extends State<FormDemoPage1> {
                 const SizedBox(
                   height: 12,
                 ),
-                FlTextFormField(
+                FlPasswordFormField(
                   label: 'Password',
-                  isPassword: true,
-                  placeholderText: 'Type pass',
                   onSaved: (newValue) {},
+                  obscureText: _obscureText,
+                  textEditingController: _pwController,
                   validator: (value) {
                     return null;
                   },
+                ),
+                Row(
+                  children: [
+                    const Spacer(),
+                    TextButton(
+                      onPressed: () {
+                        _pwController.text = _suggestPassword();
+                        _obscureText = false;
+                        setState(() {});
+                      },
+                      child: const Text('Suggest password'),
+                    ),
+                  ],
                 ),
                 const SizedBox(
                   height: 12,
@@ -57,9 +75,7 @@ class _FormDemoPage1State extends State<FormDemoPage1> {
                     if (state == FlButtonState.enable) {
                       return ElevatedButton(
                         style: ElevatedButton.styleFrom(
-                            fixedSize: const Size.fromHeight(56),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12))),
+                            fixedSize: const Size.fromHeight(56), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
                         onPressed: () {
                           setState(() {
                             future = Future.delayed(
@@ -76,9 +92,7 @@ class _FormDemoPage1State extends State<FormDemoPage1> {
                       return ElevatedButton(
                         onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                            fixedSize: const Size.fromHeight(56),
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12))),
+                            fixedSize: const Size.fromHeight(56), shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
                         child: const CupertinoActivityIndicator(),
                       );
                     }
@@ -90,5 +104,16 @@ class _FormDemoPage1State extends State<FormDemoPage1> {
         },
       ),
     );
+  }
+
+  String _suggestPassword() {
+    Random random = Random();
+    String pw = "";
+    for (int i = 0; i < 8; ++i) {
+      String supply = 'abcdefghijkmnopqrstuvwxyzABCDEFGHJKMNOPQRSTUVWXYZ1234567890';
+      int pos = random.nextInt(supply.length);
+      pw += supply.substring(pos, pos + 1);
+    }
+    return pw;
   }
 }

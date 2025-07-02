@@ -1,18 +1,17 @@
+import 'package:fl_form/formfield/fl_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
 import 'fl_form_field_theme.dart';
 
-typedef ErrorBuilder = Widget Function(BuildContext context, String errorText, FormFieldState state);
-
-class FlTextFormField extends FormField<String> {
-  final bool isPassword;
+class FlPasswordFormField extends FormField<String> {
   final TextEditingController? textEditingController;
 
-  FlTextFormField({
+  final bool obscureText;
+
+  FlPasswordFormField({
     super.key,
     required String label,
-    String? placeholderText,
     bool isRequired = false,
     FormFieldValidator<String>? validator,
     ValueChanged<String>? onChanged,
@@ -21,21 +20,15 @@ class FlTextFormField extends FormField<String> {
     FormFieldSetter<String>? onSaved,
     String? restorationId,
     bool enabled = true,
-    @Deprecated("Use FlPasswordFormField instead.") this.isPassword = false,
-    int maxLines = 1,
     Widget? prefixIcon,
     bool autofocus = false,
-    TextInputType? keyboardType,
     Brightness? keyboardAppearance,
     TextInputAction? textInputAction,
-    int? maxLength,
-    bool autocorrect = true,
-    bool enableSuggestions = true,
-    Iterable<String>? autofillHints,
     double? paddingLeftError,
-    @Deprecated("Use FlPasswordFormField instead.") Tuple2<Widget, Widget>? iconObscureText,
+    Tuple2<Widget, Widget>? iconObscureText,
     ErrorBuilder? errorBuilder,
     this.textEditingController,
+    this.obscureText = true,
   }) : super(
          validator: validator,
          onSaved: onSaved,
@@ -44,7 +37,7 @@ class FlTextFormField extends FormField<String> {
          restorationId: restorationId,
          enabled: enabled,
          builder: (field) {
-           final state = field as FlTextFormFieldState;
+           final state = field as FlPasswordFormFieldState;
 
            return Column(
              crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -70,16 +63,11 @@ class FlTextFormField extends FormField<String> {
                  cursorWidth: 1,
                  obscureText: state.obscureText,
                  enabled: enabled,
-                 maxLines: maxLines,
-                 minLines: maxLines,
                  autofocus: autofocus,
                  keyboardAppearance: keyboardAppearance,
-                 keyboardType: keyboardType,
-                 maxLength: maxLength,
                  textInputAction: textInputAction,
-                 autocorrect: autocorrect,
-                 enableSuggestions: enableSuggestions,
-                 autofillHints: autofillHints,
+                 autocorrect: false,
+                 enableSuggestions: false,
                  onChanged: (value) {
                    onChanged?.call(value);
                    state.didChange(value);
@@ -88,21 +76,18 @@ class FlTextFormField extends FormField<String> {
                      ? Theme.of(field.context).extension<FlFormFieldTheme>()?.style
                      : Theme.of(field.context).extension<FlFormFieldTheme>()?.disableStyle,
                  decoration: InputDecoration(
-                   hintText: placeholderText,
                    prefixIcon: prefixIcon,
                    fillColor: enabled
                        ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.fillColor
                        : Theme.of(field.context).extension<FlFormFieldTheme>()?.fillColorDisable,
-                   suffixIcon: isPassword
-                       ? GestureDetector(
-                           onTap: () {
-                             state.toglgleShowPass();
-                           },
-                           child: state.obscureText
-                               ? (iconObscureText?.item1 ?? const Icon(Icons.visibility_outlined))
-                               : (iconObscureText?.item2 ?? const Icon(Icons.visibility_off_outlined)),
-                         )
-                       : null,
+                   suffixIcon: GestureDetector(
+                     onTap: () {
+                       state.toglgleShowPass();
+                     },
+                     child: state.obscureText
+                         ? (iconObscureText?.item1 ?? const Icon(Icons.visibility_outlined))
+                         : (iconObscureText?.item2 ?? const Icon(Icons.visibility_off_outlined)),
+                   ),
                    enabledBorder: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
                    focusedBorder: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.focusedErrorBorder : null,
                    disabledBorder: Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.disabledBorder,
@@ -136,16 +121,16 @@ class FlTextFormField extends FormField<String> {
          },
        );
   @override
-  FormFieldState<String> createState() => FlTextFormFieldState();
+  FormFieldState<String> createState() => FlPasswordFormFieldState();
 }
 
-class FlTextFormFieldState extends FormFieldState<String> {
+class FlPasswordFormFieldState extends FormFieldState<String> {
   late TextEditingController textEditingController;
 
   late bool obscureText;
 
   @override
-  FlTextFormField get widget => super.widget as FlTextFormField;
+  FlPasswordFormField get widget => super.widget as FlPasswordFormField;
 
   void toglgleShowPass() {
     setState(() {
@@ -154,13 +139,15 @@ class FlTextFormFieldState extends FormFieldState<String> {
   }
 
   @override
+  void didUpdateWidget(covariant FormField<String> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.obscureText != (oldWidget as FlPasswordFormField).obscureText) obscureText = widget.obscureText;
+  }
+
+  @override
   void initState() {
     super.initState();
-    if (widget.isPassword) {
-      obscureText = true;
-    } else {
-      obscureText = false;
-    }
+    obscureText = widget.obscureText;
 
     textEditingController = widget.textEditingController ?? TextEditingController(text: widget.initialValue);
   }
