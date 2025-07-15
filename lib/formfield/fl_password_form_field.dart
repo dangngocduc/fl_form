@@ -29,6 +29,7 @@ class FlPasswordFormField extends FormField<String> {
     ErrorBuilder? errorBuilder,
     this.textEditingController,
     this.obscureText = true,
+    String? helperText,
   }) : super(
          validator: validator,
          onSaved: onSaved,
@@ -92,6 +93,7 @@ class FlPasswordFormField extends FormField<String> {
                    focusedBorder: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.focusedErrorBorder : null,
                    disabledBorder: Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.disabledBorder,
                    border: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
+                   helperText: helperText,
                  ).applyDefaults(Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme ?? Theme.of(field.context).inputDecorationTheme),
                ),
                if (state.hasError)
