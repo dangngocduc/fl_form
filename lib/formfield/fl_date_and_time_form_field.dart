@@ -16,6 +16,8 @@ class FlDateAndTimeFormField extends FormField<DateTime> {
     String? placeholderText,
     bool isRequired = false,
     Widget? prefixIcon,
+    String? helperText,
+    bool enabled = true,
     super.key,
   }) : super(
          builder: (field) {
@@ -56,19 +58,24 @@ class FlDateAndTimeFormField extends FormField<DateTime> {
                        Expanded(
                          child: GestureDetector(
                            behavior: HitTestBehavior.opaque,
-                           onTap: () {
-                             showDatePicker(context: state.context, initialDate: state.value ?? DateTime.now(), firstDate: firstDate, lastDate: lastDate).then((
-                               value,
-                             ) {
-                               if (value != null) {
-                                 if (state.value == null) {
-                                   state.didChange(value);
-                                 } else {
-                                   state.didChange(DateTime(value.year, value.month, value.day, state.value!.hour, state.value!.minute));
+                           onTap: enabled
+                               ? () {
+                                   showDatePicker(
+                                     context: state.context,
+                                     initialDate: state.value ?? DateTime.now(),
+                                     firstDate: firstDate,
+                                     lastDate: lastDate,
+                                   ).then((value) {
+                                     if (value != null) {
+                                       if (state.value == null) {
+                                         state.didChange(value);
+                                       } else {
+                                         state.didChange(DateTime(value.year, value.month, value.day, state.value!.hour, state.value!.minute));
+                                       }
+                                     }
+                                   });
                                  }
-                               }
-                             });
-                           },
+                               : null,
                            child: Text(
                              state.value == null ? 'YYYY/MM/DD' : (dateFormat ?? DateFormat(DateFormat.YEAR_MONTH_DAY)).format(state.value!),
                              style: state.value == null
@@ -80,15 +87,17 @@ class FlDateAndTimeFormField extends FormField<DateTime> {
                        const SizedBox(width: 32),
                        GestureDetector(
                          behavior: HitTestBehavior.opaque,
-                         onTap: () {
-                           if (state.value != null) {
-                             showTimePicker(context: state.context, initialTime: TimeOfDay.fromDateTime(state.value!)).then((value) {
-                               if (value != null) {
-                                 state.didChange(DateTime(state.value!.year, state.value!.month, state.value!.day, value.hour, value.minute));
+                         onTap: enabled
+                             ? () {
+                                 if (state.value != null) {
+                                   showTimePicker(context: state.context, initialTime: TimeOfDay.fromDateTime(state.value!)).then((value) {
+                                     if (value != null) {
+                                       state.didChange(DateTime(state.value!.year, state.value!.month, state.value!.day, value.hour, value.minute));
+                                     }
+                                   });
+                                 }
                                }
-                             });
-                           }
-                         },
+                             : null,
                          child: Text(
                            state.value == null ? 'HH:MM' : TimeOfDay.fromDateTime(state.value!).format(state.context),
                            style: state.value == null
@@ -100,6 +109,7 @@ class FlDateAndTimeFormField extends FormField<DateTime> {
                    ),
                  ),
                ),
+               if (helperText != null && !state.hasError) Text(helperText, style: Theme.of(field.context).textTheme.bodySmall),
                if (state.hasError)
                  Padding(
                    padding: EdgeInsets.only(

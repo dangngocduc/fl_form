@@ -33,6 +33,7 @@ class FlTextFormField extends FormField<String> {
     bool enableSuggestions = true,
     Iterable<String>? autofillHints,
     double? paddingLeftError,
+    String? helperText,
     @Deprecated("Use FlPasswordFormField instead.") Tuple2<Widget, Widget>? iconObscureText,
     ErrorBuilder? errorBuilder,
     this.textEditingController,
@@ -107,6 +108,7 @@ class FlTextFormField extends FormField<String> {
                    focusedBorder: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.focusedErrorBorder : null,
                    disabledBorder: Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.disabledBorder,
                    border: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
+                   helperText: helperText,
                  ).applyDefaults(Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme ?? Theme.of(field.context).inputDecorationTheme),
                ),
                if (state.hasError)

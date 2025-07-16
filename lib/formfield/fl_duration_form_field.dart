@@ -16,6 +16,8 @@ class FlDurationFormField extends FormField<Duration> {
     Widget? prefixIcon,
     bool isRequired = false,
     bool enabled = true,
+    CupertinoTimerPickerMode timerPickerMode = CupertinoTimerPickerMode.hms,
+    String? helperText,
   }) : super(
          initialValue: initialValue,
          onSaved: onSaved,
@@ -84,7 +86,7 @@ class FlDurationFormField extends FormField<Duration> {
                                        ),
                                      ),
                                      CupertinoTimerPicker(
-                                       mode: CupertinoTimerPickerMode.hms,
+                                       mode: timerPickerMode,
                                        initialTimerDuration: duration,
                                        alignment: Alignment.bottomCenter,
                                        onTimerDurationChanged: (value) {
@@ -121,6 +123,7 @@ class FlDurationFormField extends FormField<Duration> {
                        : Text(FormFieldUtils.formatDuration(state.value!, state.context), style: Theme.of(state.context).extension<FlFormFieldTheme>()?.style),
                  ),
                ),
+               if (helperText != null && !state.hasError) Text(helperText, style: Theme.of(state.context).textTheme.bodySmall),
                if (state.hasError)
                  Padding(
                    padding: EdgeInsets.only(
