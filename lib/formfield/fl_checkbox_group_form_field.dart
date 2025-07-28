@@ -1,6 +1,7 @@
+import 'package:fl_form/formfield/widget/default_error_builder.dart';
+import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
+import 'package:fl_form/formfield/widget/label_widget.dart';
 import 'package:flutter/material.dart';
-
-import 'fl_form_field_theme.dart';
 
 class FlCheckboxGroupFormField<T> extends FormField<List<T>> {
   FlCheckboxGroupFormField({
@@ -14,6 +15,7 @@ class FlCheckboxGroupFormField<T> extends FormField<List<T>> {
     AutovalidateMode? autovalidateMode,
     FormFieldSetter<List<T>>? onSaved,
     String? restorationId,
+    String? helperText,
     bool enabled = true,
   }) : super(
          autovalidateMode: autovalidateMode,
@@ -22,33 +24,18 @@ class FlCheckboxGroupFormField<T> extends FormField<List<T>> {
          onSaved: onSaved,
          validator: validator,
          restorationId: restorationId,
-         builder: (field) {
+         builder: (state) {
            return Column(
              crossAxisAlignment: CrossAxisAlignment.stretch,
              children: [
-               Padding(
-                 padding: const EdgeInsets.only(bottom: 4),
-                 child: RichText(
-                   text: TextSpan(
-                     style: Theme.of(field.context).extension<FlFormFieldTheme>()?.labelStyle,
-                     children: [
-                       TextSpan(text: label),
-                       if (isRequired)
-                         TextSpan(
-                           text: ' *',
-                           style: Theme.of(field.context).extension<FlFormFieldTheme>()?.labelStyle.copyWith(color: Colors.red),
-                         ),
-                     ],
-                   ),
-                 ),
-               ),
+               LabelWidget(label: label, isRequired: isRequired),
                InputDecorator(
-                 decoration: InputDecoration(
-                   contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                   enabledBorder: field.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-                   focusedBorder: field.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.focusedErrorBorder : null,
-                   border: field.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-                 ).applyDefaults(Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme ?? Theme.of(field.context).inputDecorationTheme),
+                 decoration: InputDecorationBuilder(
+                   enabled: enabled,
+                   hasError: state.hasError,
+                   helperText: helperText,
+                   //placeholderText: placeholderText,
+                 ).create(state.context),
                  child: Column(
                    crossAxisAlignment: CrossAxisAlignment.start,
                    children: [
@@ -56,12 +43,12 @@ class FlCheckboxGroupFormField<T> extends FormField<List<T>> {
                        return Row(
                          children: [
                            Checkbox(
-                             value: field.value?.contains(e) == true,
+                             value: state.value?.contains(e) == true,
                              onChanged: (value) {
                                if (value == true) {
-                                 field.didChange([...field.value ?? [], e]);
+                                 state.didChange([...state.value ?? [], e]);
                                } else {
-                                 field.didChange([...field.value!]..remove(e));
+                                 state.didChange([...state.value!]..remove(e));
                                }
                              },
                            ),
@@ -69,13 +56,13 @@ class FlCheckboxGroupFormField<T> extends FormField<List<T>> {
                            Expanded(
                              child: InkWell(
                                onTap: () {
-                                 if (field.value?.contains(e) == true) {
-                                   field.didChange([...field.value!]..remove(e));
+                                 if (state.value?.contains(e) == true) {
+                                   state.didChange([...state.value!]..remove(e));
                                  } else {
-                                   field.didChange([...field.value ?? [], e]);
+                                   state.didChange([...state.value ?? [], e]);
                                  }
                                },
-                               child: itemBuilder(field.context, e, null),
+                               child: itemBuilder(state.context, e, null),
                              ),
                            ),
                          ],
@@ -84,19 +71,7 @@ class FlCheckboxGroupFormField<T> extends FormField<List<T>> {
                    ],
                  ),
                ),
-               if (field.hasError)
-                 Padding(
-                   padding: EdgeInsets.only(
-                     top: 4,
-                     left: (Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.contentPadding as EdgeInsets).left,
-                   ),
-                   child: RichText(
-                     text: TextSpan(
-                       style: Theme.of(field.context).extension<FlFormFieldTheme>()?.errorStyle,
-                       children: [TextSpan(text: field.errorText)],
-                     ),
-                   ),
-                 ),
+               if (state.hasError) defaultErrorBuilder(state.context, state.errorText!),
              ],
            );
          },

@@ -1,5 +1,7 @@
 import 'dart:developer' as developer;
 
+import 'package:fl_form/formfield/widget/default_error_builder.dart';
+import 'package:fl_form/formfield/widget/label_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -29,22 +31,7 @@ class FlMoneyFormField extends FormField<double> {
            return Column(
              crossAxisAlignment: CrossAxisAlignment.stretch,
              children: [
-               Padding(
-                 padding: const EdgeInsets.only(bottom: 4),
-                 child: RichText(
-                   text: TextSpan(
-                     style: Theme.of(state.context).extension<FlFormFieldTheme>()?.labelStyle,
-                     children: [
-                       TextSpan(text: label),
-                       if (isRequired)
-                         TextSpan(
-                           text: ' *',
-                           style: Theme.of(state.context).extension<FlFormFieldTheme>()?.labelStyle.copyWith(color: Colors.red),
-                         ),
-                     ],
-                   ),
-                 ),
-               ),
+               LabelWidget(label: label, isRequired: isRequired),
                InputDecorator(
                  decoration: InputDecoration(
                    hintText: placeholderText,
@@ -96,19 +83,7 @@ class FlMoneyFormField extends FormField<double> {
                    ],
                  ),
                ),
-               if (state.hasError)
-                 Padding(
-                   padding: EdgeInsets.only(
-                     top: 4,
-                     left: (Theme.of(state.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.contentPadding as EdgeInsets).left,
-                   ),
-                   child: RichText(
-                     text: TextSpan(
-                       style: Theme.of(state.context).extension<FlFormFieldTheme>()?.errorStyle,
-                       children: [TextSpan(text: state.errorText)],
-                     ),
-                   ),
-                 ),
+               if (state.hasError) defaultErrorBuilder(state.context, state.errorText!),
              ],
            );
          },

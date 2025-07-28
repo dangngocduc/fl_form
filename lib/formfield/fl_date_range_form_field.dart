@@ -1,3 +1,6 @@
+import 'package:fl_form/formfield/widget/default_error_builder.dart';
+import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
+import 'package:fl_form/formfield/widget/label_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
@@ -21,46 +24,32 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
     String textSelectDate = 'Select dates',
     String textSelectEndDate = 'Select end date',
     String toText = 'To',
+    String? helperText,
   }) : super(
          initialValue: initialValue,
          onSaved: onSaved,
          validator: validator,
-         builder: (field) {
+         builder: (state) {
            String valueDisplay = '';
-           if (field.value != null) {
+           if (state.value != null) {
              valueDisplay =
-                 '${MaterialLocalizations.of(field.context).formatMediumDate(field.value!.item1)} - ${MaterialLocalizations.of(field.context).formatMediumDate(field.value!.item2)}';
+                 '${MaterialLocalizations.of(state.context).formatMediumDate(state.value!.item1)} - ${MaterialLocalizations.of(state.context).formatMediumDate(state.value!.item2)}';
            } else {
              valueDisplay = '';
            }
            return Column(
              crossAxisAlignment: CrossAxisAlignment.stretch,
              children: [
-               Padding(
-                 padding: const EdgeInsets.only(bottom: 4),
-                 child: RichText(
-                   text: TextSpan(
-                     style: Theme.of(field.context).extension<FlFormFieldTheme>()?.labelStyle,
-                     children: [
-                       TextSpan(text: label),
-                       if (isRequired)
-                         TextSpan(
-                           text: ' *',
-                           style: Theme.of(field.context).extension<FlFormFieldTheme>()?.labelStyle.copyWith(color: Colors.red),
-                         ),
-                     ],
-                   ),
-                 ),
-               ),
+               LabelWidget(label: label, isRequired: isRequired),
                GestureDetector(
                  behavior: HitTestBehavior.opaque,
                  onTap: () {
                    showDialog<DateTimeRange>(
-                     context: field.context,
+                     context: state.context,
                      builder: (context) {
                        return CalendarPopUp(
-                         initialStartDate: field.value?.item1,
-                         initialEndDate: field.value?.item2,
+                         initialStartDate: state.value?.item1,
+                         initialEndDate: state.value?.item2,
                          maximumDate: DateTime.now().add(const Duration(days: 90)),
                          textSelectDate: textSelectDate,
                          textSelectEndDate: textSelectEndDate,
@@ -78,51 +67,39 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
                      },
                    ).then((value) {
                      if (value != null) {
-                       field.didChange(Tuple2(value.start, value.end));
+                       state.didChange(Tuple2(value.start, value.end));
                      }
                    });
                  },
                  child: InputDecorator(
-                   decoration: InputDecoration(
-                     contentPadding: contentPadding,
-                     hintText: placeholderText,
-                     enabledBorder: field.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-                     focusedBorder: field.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.focusedErrorBorder : null,
-                     border: field.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-                   ).applyDefaults(Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme ?? Theme.of(field.context).inputDecorationTheme),
+                   decoration: InputDecorationBuilder(
+                     enabled: enabled,
+                     hasError: state.hasError,
+                     helperText: helperText,
+                     placeholderText: placeholderText,
+                     prefixIcon: prefixIcon,
+                   ).create(state.context),
                    isEmpty: false,
                    child: Row(
                      crossAxisAlignment: CrossAxisAlignment.center,
                      children: [
                        Expanded(
-                         child: DateInfo(icon: prefixIcon ?? SizedBox.shrink(), hint: 'Start date', dateTime: field.value?.item1),
+                         child: DateInfo(icon: prefixIcon ?? SizedBox.shrink(), hint: 'Start date', dateTime: state.value?.item1),
                        ),
                        Container(
                          height: 16,
                          width: 2,
                          margin: const EdgeInsets.symmetric(horizontal: 8).copyWith(right: 16),
-                         color: Theme.of(field.context).dividerColor,
+                         color: Theme.of(state.context).dividerColor,
                        ),
                        Expanded(
-                         child: DateInfo(icon: prefixIcon ?? SizedBox.shrink(), hint: 'End date', dateTime: field.value?.item2),
+                         child: DateInfo(icon: prefixIcon ?? SizedBox.shrink(), hint: 'End date', dateTime: state.value?.item2),
                        ),
                      ],
                    ),
                  ),
                ),
-               if (field.hasError)
-                 Padding(
-                   padding: EdgeInsets.only(
-                     top: 4,
-                     left: (Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.contentPadding as EdgeInsets).left,
-                   ),
-                   child: RichText(
-                     text: TextSpan(
-                       style: Theme.of(field.context).extension<FlFormFieldTheme>()?.errorStyle,
-                       children: [TextSpan(text: field.errorText)],
-                     ),
-                   ),
-                 ),
+               if (state.hasError) defaultErrorBuilder(state.context, state.errorText!),
              ],
            );
          },

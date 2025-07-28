@@ -1,8 +1,11 @@
 import 'package:fl_form/formfield/fl_text_form_field.dart';
+import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
+import 'package:fl_form/formfield/widget/label_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
 import 'fl_form_field_theme.dart';
+import 'widget/default_error_builder.dart';
 
 class FlPasswordFormField extends FormField<String> {
   final TextEditingController? textEditingController;
@@ -26,10 +29,11 @@ class FlPasswordFormField extends FormField<String> {
     TextInputAction? textInputAction,
     double? paddingLeftError,
     Tuple2<Widget, Widget>? iconObscureText,
-    ErrorBuilder? errorBuilder,
+    ErrorBuilder errorBuilder = defaultErrorBuilder,
     this.textEditingController,
     this.obscureText = true,
     String? helperText,
+    String? placeholderText,
   }) : super(
          validator: validator,
          onSaved: onSaved,
@@ -43,22 +47,7 @@ class FlPasswordFormField extends FormField<String> {
            return Column(
              crossAxisAlignment: CrossAxisAlignment.stretch,
              children: [
-               Padding(
-                 padding: const EdgeInsets.only(bottom: 4),
-                 child: RichText(
-                   text: TextSpan(
-                     style: Theme.of(field.context).extension<FlFormFieldTheme>()?.labelStyle,
-                     children: [
-                       TextSpan(text: label),
-                       if (isRequired)
-                         TextSpan(
-                           text: ' *',
-                           style: Theme.of(field.context).extension<FlFormFieldTheme>()?.labelStyle.copyWith(color: Colors.red),
-                         ),
-                     ],
-                   ),
-                 ),
-               ),
+               LabelWidget(label: label, isRequired: isRequired),
                TextField(
                  controller: state.textEditingController,
                  cursorWidth: 1,
@@ -76,11 +65,12 @@ class FlPasswordFormField extends FormField<String> {
                  style: enabled
                      ? Theme.of(field.context).extension<FlFormFieldTheme>()?.style
                      : Theme.of(field.context).extension<FlFormFieldTheme>()?.disableStyle,
-                 decoration: InputDecoration(
+                 decoration: InputDecorationBuilder(
+                   enabled: enabled,
+                   hasError: state.hasError,
+                   helperText: helperText,
+                   placeholderText: placeholderText,
                    prefixIcon: prefixIcon,
-                   fillColor: enabled
-                       ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.fillColor
-                       : Theme.of(field.context).extension<FlFormFieldTheme>()?.fillColorDisable,
                    suffixIcon: GestureDetector(
                      onTap: () {
                        state.toglgleShowPass();
@@ -89,35 +79,9 @@ class FlPasswordFormField extends FormField<String> {
                          ? (iconObscureText?.item1 ?? const Icon(Icons.visibility_outlined))
                          : (iconObscureText?.item2 ?? const Icon(Icons.visibility_off_outlined)),
                    ),
-                   enabledBorder: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-                   focusedBorder: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.focusedErrorBorder : null,
-                   disabledBorder: Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.disabledBorder,
-                   border: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-                   helperText: helperText,
-                 ).applyDefaults(Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme ?? Theme.of(field.context).inputDecorationTheme),
+                 ).create(field.context),
                ),
-               if (state.hasError)
-                 errorBuilder != null
-                     ? errorBuilder(field.context, state.errorText!, state)
-                     : Padding(
-                         // todo: use Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.contentPadding completely instead of just the left-property
-                         padding: EdgeInsets.only(
-                           top: 4,
-                           left:
-                               paddingLeftError ??
-                               (Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.contentPadding != null
-                                       ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.contentPadding as EdgeInsets
-                                       : null)
-                                   ?.left ??
-                               4,
-                         ),
-                         child: RichText(
-                           text: TextSpan(
-                             style: Theme.of(field.context).extension<FlFormFieldTheme>()?.errorStyle,
-                             children: [TextSpan(text: state.errorText)],
-                           ),
-                         ),
-                       ),
+               if (state.hasError) errorBuilder(state.context, state.errorText!),
              ],
            );
          },

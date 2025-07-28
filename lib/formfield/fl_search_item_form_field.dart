@@ -1,9 +1,10 @@
 import 'package:fl_form/formfield/bottom_sheet/single_item_picker_bottom_sheet.dart';
 import 'package:fl_form/formfield/dialog/fl_search_page.dart';
+import 'package:fl_form/formfield/widget/default_error_builder.dart';
+import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
+import 'package:fl_form/formfield/widget/label_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'fl_form_field_theme.dart';
 
 class FlSearchItemFormField<T> extends FormField<T> {
   final OnSearch<T> onSearch;
@@ -15,43 +16,23 @@ class FlSearchItemFormField<T> extends FormField<T> {
     ContentSelectedBuilder<T>? contentSelectedBuilder,
     ValueSelectorWidgetBuilder<T>? itemListBuilder,
     Widget? prefixIcon,
-    FormFieldValidator<T>? validator,
-    FormFieldSetter<T>? onSaved,
-    AutovalidateMode? autovalidateMode,
+    super.validator,
+    super.onSaved,
+    super.autovalidateMode,
     EdgeInsetsGeometry? contentPadding,
-    bool enabled = true,
-    T? initialValue,
+    super.enabled,
+    super.initialValue,
     required this.onSearch,
     required this.itemBuilder,
+    String? helperText,
     bool isRequired = false,
-    required List<T> options,
   }) : super(
-         initialValue: initialValue,
-         validator: validator,
-         onSaved: onSaved,
-         autovalidateMode: autovalidateMode,
-         enabled: enabled,
          builder: (field) {
            final state = field as FlSearchItemFormFieldState<T>;
            return Column(
              crossAxisAlignment: CrossAxisAlignment.stretch,
              children: [
-               Padding(
-                 padding: const EdgeInsets.only(bottom: 4),
-                 child: RichText(
-                   text: TextSpan(
-                     style: Theme.of(field.context).extension<FlFormFieldTheme>()?.labelStyle,
-                     children: [
-                       TextSpan(text: label),
-                       if (isRequired)
-                         TextSpan(
-                           text: ' *',
-                           style: Theme.of(field.context).extension<FlFormFieldTheme>()?.labelStyle.copyWith(color: Colors.red),
-                         ),
-                     ],
-                   ),
-                 ),
-               ),
+               LabelWidget(label: label, isRequired: isRequired),
                GestureDetector(
                  behavior: HitTestBehavior.opaque,
                  onTap: () {
@@ -69,9 +50,11 @@ class FlSearchItemFormField<T> extends FormField<T> {
                    });
                  },
                  child: InputDecorator(
-                   decoration: InputDecoration(
-                     hintText: placeholderText,
-                     contentPadding: contentPadding,
+                   decoration: InputDecorationBuilder(
+                     enabled: enabled,
+                     hasError: state.hasError,
+                     helperText: helperText,
+                     placeholderText: placeholderText,
                      prefixIcon: prefixIcon,
                      suffixIcon: field.value != null
                          ? GestureDetector(
@@ -81,31 +64,16 @@ class FlSearchItemFormField<T> extends FormField<T> {
                              child: const Icon(CupertinoIcons.clear_circled_solid),
                            )
                          : null,
-                     enabledBorder: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-                     focusedBorder: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.focusedErrorBorder : null,
-                     border: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-                   ).applyDefaults(Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme ?? Theme.of(field.context).inputDecorationTheme),
+                   ).create(field.context),
                    isEmpty: state.value == null,
                    child: state.value == null
                        ? null
-                       : (contentSelectedBuilder != null
-                             ? contentSelectedBuilder(state.value as T, state.context)
-                             : FlSearchItemPickerDefaultDisplayValue(data: state.value!)),
+                       : contentSelectedBuilder != null
+                       ? contentSelectedBuilder(state.value as T, state.context)
+                       : defaultContentSelectedBuilder(state.value as T, state.context),
                  ),
                ),
-               if (state.hasError)
-                 Padding(
-                   padding: EdgeInsets.only(
-                     top: 4,
-                     left: (Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.contentPadding as EdgeInsets).left,
-                   ),
-                   child: RichText(
-                     text: TextSpan(
-                       style: Theme.of(field.context).extension<FlFormFieldTheme>()?.errorStyle,
-                       children: [TextSpan(text: state.errorText)],
-                     ),
-                   ),
-                 ),
+               if (state.hasError) defaultErrorBuilder(state.context, state.errorText!),
              ],
            );
          },
@@ -120,14 +88,18 @@ class FlSearchItemFormField<T> extends FormField<T> {
 class FlSearchItemFormFieldState<T> extends FormFieldState<T> {
   @override
   FlSearchItemFormField<T> get widget => super.widget as FlSearchItemFormField<T>;
+
+  @override
+  void didUpdateWidget(covariant FormField<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialValue != oldWidget.initialValue) {
+      // when initialValue changed - maybe because you have an async call to retrieve the correct value and show the form field in the meantime with
+      // a null-value, set the new initial value.
+      setValue(widget.initialValue);
+    }
+  }
 }
 
-class FlSearchItemPickerDefaultDisplayValue extends StatelessWidget {
-  final Object data;
-
-  const FlSearchItemPickerDefaultDisplayValue({super.key, required this.data});
-  @override
-  Widget build(BuildContext context) {
-    return Text(data.toString());
-  }
+Widget defaultContentSelectedBuilder<T>(T data, BuildContext context) {
+  return Text(data.toString());
 }

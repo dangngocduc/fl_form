@@ -1,11 +1,15 @@
+import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
+import 'package:fl_form/formfield/widget/label_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
 import 'fl_form_field_theme.dart';
+import 'widget/default_error_builder.dart';
 
-typedef ErrorBuilder = Widget Function(BuildContext context, String errorText, FormFieldState state);
+typedef ErrorBuilder = Widget Function(BuildContext context, String errorText);
 
 class FlTextFormField extends FormField<String> {
+  @Deprecated("Use FlPasswordFormField instead.")
   final bool isPassword;
   final TextEditingController? textEditingController;
 
@@ -35,7 +39,7 @@ class FlTextFormField extends FormField<String> {
     double? paddingLeftError,
     String? helperText,
     @Deprecated("Use FlPasswordFormField instead.") Tuple2<Widget, Widget>? iconObscureText,
-    ErrorBuilder? errorBuilder,
+    ErrorBuilder errorBuilder = defaultErrorBuilder,
     this.textEditingController,
   }) : super(
          validator: validator,
@@ -50,22 +54,7 @@ class FlTextFormField extends FormField<String> {
            return Column(
              crossAxisAlignment: CrossAxisAlignment.stretch,
              children: [
-               Padding(
-                 padding: const EdgeInsets.only(bottom: 4),
-                 child: RichText(
-                   text: TextSpan(
-                     style: Theme.of(field.context).extension<FlFormFieldTheme>()?.labelStyle,
-                     children: [
-                       TextSpan(text: label),
-                       if (isRequired)
-                         TextSpan(
-                           text: ' *',
-                           style: Theme.of(field.context).extension<FlFormFieldTheme>()?.labelStyle.copyWith(color: Colors.red),
-                         ),
-                     ],
-                   ),
-                 ),
-               ),
+               LabelWidget(label: label, isRequired: isRequired),
                TextField(
                  controller: state.textEditingController,
                  cursorWidth: 1,
@@ -88,12 +77,12 @@ class FlTextFormField extends FormField<String> {
                  style: enabled
                      ? Theme.of(field.context).extension<FlFormFieldTheme>()?.style
                      : Theme.of(field.context).extension<FlFormFieldTheme>()?.disableStyle,
-                 decoration: InputDecoration(
-                   hintText: placeholderText,
+                 decoration: InputDecorationBuilder(
+                   enabled: enabled,
+                   hasError: state.hasError,
+                   helperText: helperText,
+                   placeholderText: placeholderText,
                    prefixIcon: prefixIcon,
-                   fillColor: enabled
-                       ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.fillColor
-                       : Theme.of(field.context).extension<FlFormFieldTheme>()?.fillColorDisable,
                    suffixIcon: isPassword
                        ? GestureDetector(
                            onTap: () {
@@ -104,35 +93,9 @@ class FlTextFormField extends FormField<String> {
                                : (iconObscureText?.item2 ?? const Icon(Icons.visibility_off_outlined)),
                          )
                        : null,
-                   enabledBorder: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-                   focusedBorder: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.focusedErrorBorder : null,
-                   disabledBorder: Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.disabledBorder,
-                   border: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-                   helperText: helperText,
-                 ).applyDefaults(Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme ?? Theme.of(field.context).inputDecorationTheme),
+                 ).create(field.context),
                ),
-               if (state.hasError)
-                 errorBuilder != null
-                     ? errorBuilder(field.context, state.errorText!, state)
-                     : Padding(
-                         // todo: use Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.contentPadding completely instead of just the left-property
-                         padding: EdgeInsets.only(
-                           top: 4,
-                           left:
-                               paddingLeftError ??
-                               (Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.contentPadding != null
-                                       ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.contentPadding as EdgeInsets
-                                       : null)
-                                   ?.left ??
-                               4,
-                         ),
-                         child: RichText(
-                           text: TextSpan(
-                             style: Theme.of(field.context).extension<FlFormFieldTheme>()?.errorStyle,
-                             children: [TextSpan(text: state.errorText)],
-                           ),
-                         ),
-                       ),
+               if (state.hasError) errorBuilder(state.context, state.errorText!),
              ],
            );
          },
@@ -165,5 +128,16 @@ class FlTextFormFieldState extends FormFieldState<String> {
     }
 
     textEditingController = widget.textEditingController ?? TextEditingController(text: widget.initialValue);
+  }
+
+  @override
+  void didUpdateWidget(FlTextFormField oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.initialValue != oldWidget.initialValue) {
+      // when initialValue changed - maybe because you have an async call to retrieve the correct value and show the form field in the meantime with
+      // a null-value, set the new initial value.
+      setValue(widget.initialValue);
+      textEditingController.text = widget.initialValue ?? '';
+    }
   }
 }
