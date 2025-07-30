@@ -82,21 +82,7 @@ Then, run `flutter pub get` in your terminal.
 
 For enhanced styling, you need to add the `FlFormFieldTheme` to your `MaterialApp`'s theme extensions.
 
-#### Configuration
-
-```flutter
-    MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData.dark(
-        useMaterial3: true,
-        ).copyWith(extensions: [
-        FlFormFieldTheme.dark(context),
-        ]),
-        home: const MainExample(),
-    );
-```
-
-Configuration via default themes also works:
+Configuration via default themes:
 
 ```flutter
   static TextStyle fontStyle = GoogleFonts.birthstone();
@@ -112,8 +98,21 @@ Configuration via default themes also works:
   );
 ```
 
+Enhanced styling options:
 
-#### FlFormFieldTheme
+```flutter
+    MaterialApp(
+        title: 'Flutter Demo',
+        theme: ThemeData.dark(
+        useMaterial3: true,
+        ).copyWith(extensions: [
+        FlFormFieldTheme.dark(context),
+        ]),
+        home: const MainExample(),
+    );
+```
+
+and the FlFormFieldTheme
 
 ```flutter
 ...
@@ -132,6 +131,7 @@ Configuration via default themes also works:
   });
 
 ```
+
 
 ## Available Form Fields
 
