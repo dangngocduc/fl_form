@@ -28,10 +28,14 @@ class InputDecorationBuilder {
       disabledBorder: Theme.of(context).extension<FlFormFieldTheme>()?.inputDecorationTheme.disabledBorder,
       border: hasError ? Theme.of(context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
       helperText: helperText,
-      fillColor: enabled
-          ? Theme.of(context).extension<FlFormFieldTheme>()?.inputDecorationTheme.fillColor
-          : Theme.of(context).extension<FlFormFieldTheme>()?.fillColorDisable,
+      fillColor: fillColor(context),
       enabled: enabled,
     ).applyDefaults(Theme.of(context).extension<FlFormFieldTheme>()?.inputDecorationTheme ?? Theme.of(context).inputDecorationTheme);
+  }
+
+  Color? fillColor(BuildContext context) {
+    return enabled
+        ? Theme.of(context).extension<FlFormFieldTheme>()?.inputDecorationTheme.fillColor
+        : Theme.of(context).extension<FlFormFieldTheme>()?.fillColorDisable;
   }
 }
