@@ -1,8 +1,9 @@
 import 'package:fl_form/formfield/bottom_sheet/item_picker_default_widget.dart';
 import 'package:fl_form/formfield/bottom_sheet/single_item_picker_bottom_sheet.dart';
+import 'package:fl_form/formfield/widget/default_error_builder.dart';
+import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
+import 'package:fl_form/formfield/widget/label_widget.dart';
 import 'package:flutter/material.dart';
-
-import 'fl_form_field_theme.dart';
 
 class SingleItemPickerFormField<T> extends FormField<T> {
   SingleItemPickerFormField({
@@ -19,6 +20,7 @@ class SingleItemPickerFormField<T> extends FormField<T> {
     T? initialValue,
     bool isRequired = false,
     required List<T> options,
+    String? helperText,
   }) : super(
          initialValue: initialValue,
          validator: validator,
@@ -30,45 +32,32 @@ class SingleItemPickerFormField<T> extends FormField<T> {
            return Column(
              crossAxisAlignment: CrossAxisAlignment.stretch,
              children: [
-               Padding(
-                 padding: const EdgeInsets.only(bottom: 4),
-                 child: RichText(
-                   text: TextSpan(
-                     style: Theme.of(field.context).extension<FlFormFieldTheme>()?.labelStyle,
-                     children: [
-                       TextSpan(text: label),
-                       if (isRequired)
-                         TextSpan(
-                           text: ' *',
-                           style: Theme.of(field.context).extension<FlFormFieldTheme>()?.labelStyle.copyWith(color: Colors.red),
-                         ),
-                     ],
-                   ),
-                 ),
-               ),
+               LabelWidget(label: label, isRequired: isRequired),
                GestureDetector(
                  behavior: HitTestBehavior.opaque,
-                 onTap: () {
-                   SingleItemPickerBottomSheet.show<T>(
-                     state.context,
-                     itemListBuilder ?? (context, value, isSelected) => ItemPickerDefaultWidget(data: value, isSelected: isSelected),
-                     options,
-                     state.value,
-                   ).then((value) {
-                     if (value != null) {
-                       state.didChange(value);
-                     }
-                   });
-                 },
+                 onTap: enabled
+                     ? () {
+                         SingleItemPickerBottomSheet.show<T>(
+                           state.context,
+                           itemListBuilder ?? (context, value, isSelected) => ItemPickerDefaultWidget(data: value, isSelected: isSelected),
+                           options,
+                           state.value,
+                         ).then((value) {
+                           if (value != null) {
+                             state.didChange(value);
+                           }
+                         });
+                       }
+                     : null,
                  child: InputDecorator(
-                   decoration: InputDecoration(
-                     hintText: placeholderText,
+                   decoration: InputDecorationBuilder(
+                     enabled: enabled,
+                     hasError: state.hasError,
+                     helperText: helperText,
+                     placeholderText: placeholderText,
                      prefixIcon: prefixIcon,
                      suffixIcon: const Icon(Icons.keyboard_arrow_down),
-                     enabledBorder: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-                     focusedBorder: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.focusedErrorBorder : null,
-                     border: state.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-                   ).applyDefaults(Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme ?? Theme.of(field.context).inputDecorationTheme),
+                   ).create(state.context),
                    isEmpty: state.value == null,
                    child: state.value == null
                        ? null
@@ -77,19 +66,7 @@ class SingleItemPickerFormField<T> extends FormField<T> {
                              : SingleItemPickerDefaultDisplayValue(data: state.value!)),
                  ),
                ),
-               if (state.hasError)
-                 Padding(
-                   padding: EdgeInsets.only(
-                     top: 4,
-                     left: (Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.contentPadding as EdgeInsets).left,
-                   ),
-                   child: RichText(
-                     text: TextSpan(
-                       style: Theme.of(field.context).extension<FlFormFieldTheme>()?.errorStyle,
-                       children: [TextSpan(text: state.errorText)],
-                     ),
-                   ),
-                 ),
+               if (state.hasError) defaultErrorBuilder(state.context, state.errorText!),
              ],
            );
          },

@@ -1,9 +1,11 @@
-<p align="center">
+# Fl Form
 
+A collection of Flutter FormField widgets to easily create beautiful and customizable forms.
+
+<p align="center">
   <a href="https://pub.dartlang.org/packages/fl_form">
     <img alt="Pub Package" src="https://img.shields.io/pub/v/fl_form.svg">
   </a>
-  <br/>
   <a href="https://github.com/dangngocduc/fl_form">
     <img src="https://img.shields.io/github/stars/dangngocduc/fl_form.svg?style=flat&logo=github&colorB=deeppink&label=stars" alt="Star on GitHub">
   </a>
@@ -14,6 +16,17 @@
     <img alt="MIT License" src="https://img.shields.io/badge/License-MIT-blue.svg">
   </a>
 </p>
+
+---
+
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Available Form Fields](#available-form-fields)
+- [Contributing](#contributing)
+- [License](#license)
 
 ---
 ## Features
@@ -42,9 +55,10 @@
 
 
 
-This package provide FormField for some data type on your application, it can work with Form on your application.
+This package provides a set of pre-built `FormField` widgets that integrate seamlessly with Flutter's `Form` widget. It helps you create forms with various data types quickly and with a consistent look and feel.
 
 - Text Input
+- Integer or Double Input
 - Avatar
 - Date, Time, Duration
 - Single Item Picker
@@ -53,15 +67,40 @@ This package provide FormField for some data type on your application, it can wo
 - Radio Button
 - CheckBox Group
 
+## Installation
+
+Add this to your package's `pubspec.yaml` file:
+
+```yaml
+dependencies:
+  fl_form: ^latest_version
+```
+
+Then, run `flutter pub get` in your terminal.
+
 ## Usage
 
-### ⚠️ ⚠️ ⚠️ Require Theme Extension ⚠️ ⚠️ ⚠️
+For enhanced styling, you need to add the `FlFormFieldTheme` to your `MaterialApp`'s theme extensions.
 
-FormFiel is required Application use ThemeExtension: **FlFormFieldTheme**
+Configuration via default themes:
 
-#### Configuration
+```flutter
+  static TextStyle fontStyle = GoogleFonts.birthstone();
 
-```dart
+  ThemeData.light().copyWith(
+    inputDecorationTheme: InputDecorationTheme(
+      hintStyle: TextStyle(color: Color(0xff999999)).merge(fontStyle),
+      floatingLabelStyle: TextStyle().merge(fontStyle),
+      border: OutlineInputBorder(),
+      fillColor: Color(0xffffffff),
+      filled: true,
+    ),
+  );
+```
+
+Enhanced styling options:
+
+```flutter
     MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData.dark(
@@ -73,9 +112,9 @@ FormFiel is required Application use ThemeExtension: **FlFormFieldTheme**
     );
 ```
 
-#### FlFormFieldTheme
+and the FlFormFieldTheme
 
-```dart
+```flutter
 ...
   final TextStyle labelStyle;
   final InputDecorationTheme inputDecorationTheme;
@@ -93,11 +132,10 @@ FormFiel is required Application use ThemeExtension: **FlFormFieldTheme**
 
 ```
 
-```dart
 
-```
+## Available Form Fields
 
-### 📃 1, FlTextFormField
+### FlTextFormField
 
 <img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/textfield_guide.png" width="100%"/>
 
@@ -164,7 +202,7 @@ Example Area Text
 
 ### FlTimeFormField
 
-```dart
+```flutter
     FlTimeFormField(
         label: 'Time Start',
         placeholderText: 'HH:MM',
@@ -180,7 +218,7 @@ Example Area Text
 
 <img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/date_time_form_field_guide.png" width="100%"/>
 
-```dart
+```flutter
     FlDateAndTimeFormField(
         firstDate: DateTime.now(),
         lastDate: DateTime.now().add(const Duration(days: 100)),
@@ -193,7 +231,7 @@ Example Area Text
 
 ### FlDurationFormField
 
-```dart
+```flutter
     FlDurationFormField(
         prefixIcon: Icon(Icons.date_range),
         label: 'Select Duration',
@@ -201,11 +239,11 @@ Example Area Text
     ),
 ```
 
-### AvatarFormFieldPage
+### FlAvatarFormField
 
-#### 1, Default Avatar FormField
+#### Default Avatar FormField
 
-```dart
+```flutter
     FlAvatarFormField(
     radius: 64,
     autovalidateMode: AutovalidateMode.always,
@@ -217,9 +255,9 @@ Example Area Text
     ),
 ```
 
-#### 2, Customize Avatar FormField
+#### Custom Avatar FormField
 
-```dart
+```flutter
     Center(
     child: FlRawAvatarFormField(
         builder: (
@@ -270,22 +308,22 @@ Example Area Text
     ),
 ```
 
-### Bool Value FormField
+### FlBoolFormField
 
 <img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/bool_form_field.png" width="50%"/>
 
-#### 1, FlBoolFormField
+#### Default Bool FormField
 
-```dart
+```flutter
     FlBoolFormField(
         spacing: 16,
         title: 'Select All',
     )
 ```
 
-#### 2, FlRawBoolFormField
+#### Custom Bool FormField
 
-```dart
+```flutter
     FlRawBoolFormField(
         title: 'Select All',
         rawBuilder: (context, data, didChange) {
@@ -309,13 +347,13 @@ Example Area Text
     ),
 ```
 
-### Single Item Picker Form Field
+### FlSingleItemPickerFormField
 
 <img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/single_item_picker_form_field.png" width="100%"/>
 
 
 
-```dart
+```flutter
     SingleItemPickerFormField<SimpleData>(
         label: 'Select Item customize',
         placeholderText: 'Select Item',
@@ -397,11 +435,11 @@ Example Area Text
     )
 ```
 
-### Multiple Item Picker Form Field
+### FlMultipleItemPickerFormField
 
 <img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/multiple_item_picker_form_field.png" width="100%"/>
 
-```dart
+```flutter
     MultipleItemPickerFormField<SimpleData>(
         label: 'Select Items customize',
         placeholderText: 'Select Items',
@@ -471,11 +509,11 @@ Example Area Text
     )
 ```
 
-### Radio Button Group FormField
+### FlRadioButtonGroupFormField
 
 <img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_radio_button_form_field.png" width="100%"/>
 
-```dart
+```flutter
     FlRadioButtonFormField(
         isRequired: true,
         autovalidateMode: AutovalidateMode.always,
@@ -492,11 +530,11 @@ Example Area Text
     )
 ```
 
-### Checbox Group FormField
+### FlCheckboxGroupFormField
 
 <img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/fl_checkbox_group_form_field.png" width="100%"/>
 
-```dart
+```flutter
     FlCheckboxGroupFormField(
         isRequired: true,
         autovalidateMode: AutovalidateMode.always,
@@ -515,3 +553,15 @@ Example Area Text
         ],
     )
 ```
+
+---
+
+## Contributing
+
+Contributions are welcome! If you have any ideas, suggestions, or bug reports, please open an issue or create a pull request on GitHub.
+
+---
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

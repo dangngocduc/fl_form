@@ -1,3 +1,6 @@
+import 'package:fl_form/formfield/widget/default_error_builder.dart';
+import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
+import 'package:fl_form/formfield/widget/label_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'fl_form_field_theme.dart';
@@ -14,6 +17,8 @@ class FlRadioButtonFormField<T> extends FormField<T> {
     FormFieldSetter<T>? onSaved,
     String? restorationId,
     bool enabled = true,
+    String? helperText,
+    String? placeholderText,
   }) : super(
          autovalidateMode: autovalidateMode,
          enabled: enabled,
@@ -21,33 +26,18 @@ class FlRadioButtonFormField<T> extends FormField<T> {
          onSaved: onSaved,
          restorationId: restorationId,
          validator: validator,
-         builder: (field) {
+         builder: (state) {
            return Column(
              crossAxisAlignment: CrossAxisAlignment.stretch,
              children: [
-               Padding(
-                 padding: const EdgeInsets.only(bottom: 4),
-                 child: RichText(
-                   text: TextSpan(
-                     style: Theme.of(field.context).extension<FlFormFieldTheme>()?.labelStyle,
-                     children: [
-                       TextSpan(text: label),
-                       if (isRequired)
-                         TextSpan(
-                           text: ' *',
-                           style: Theme.of(field.context).extension<FlFormFieldTheme>()?.labelStyle.copyWith(color: Colors.red),
-                         ),
-                     ],
-                   ),
-                 ),
-               ),
+               LabelWidget(label: label, isRequired: isRequired),
                InputDecorator(
-                 decoration: InputDecoration(
-                   contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                   enabledBorder: field.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-                   focusedBorder: field.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.focusedErrorBorder : null,
-                   border: field.hasError ? Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.errorBorder : null,
-                 ).applyDefaults(Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme ?? Theme.of(field.context).inputDecorationTheme),
+                 decoration: InputDecorationBuilder(
+                   enabled: enabled,
+                   hasError: state.hasError,
+                   helperText: helperText,
+                   placeholderText: placeholderText,
+                 ).create(state.context),
                  child: Column(
                    crossAxisAlignment: CrossAxisAlignment.start,
                    children: [
@@ -56,16 +46,16 @@ class FlRadioButtonFormField<T> extends FormField<T> {
                          children: [
                            Radio(
                              value: e,
-                             groupValue: field.value,
+                             groupValue: state.value,
                              onChanged: (value) {
-                               field.didChange(value);
+                               state.didChange(value);
                              },
                            ),
                            const SizedBox(width: 4),
                            Expanded(
                              child: Text(
                                e.toString(),
-                               style: Theme.of(field.context).extension<FlFormFieldTheme>()?.style ?? Theme.of(field.context).textTheme.bodyMedium,
+                               style: Theme.of(state.context).extension<FlFormFieldTheme>()?.style ?? Theme.of(state.context).textTheme.bodyMedium,
                              ),
                            ),
                          ],
@@ -74,19 +64,7 @@ class FlRadioButtonFormField<T> extends FormField<T> {
                    ],
                  ),
                ),
-               if (field.hasError)
-                 Padding(
-                   padding: EdgeInsets.only(
-                     top: 4,
-                     left: (Theme.of(field.context).extension<FlFormFieldTheme>()?.inputDecorationTheme.contentPadding as EdgeInsets).left,
-                   ),
-                   child: RichText(
-                     text: TextSpan(
-                       style: Theme.of(field.context).extension<FlFormFieldTheme>()?.errorStyle,
-                       children: [TextSpan(text: field.errorText)],
-                     ),
-                   ),
-                 ),
+               if (state.hasError) defaultErrorBuilder(state.context, state.errorText!),
              ],
            );
          },

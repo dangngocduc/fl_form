@@ -1,47 +1,44 @@
+import 'package:fl_form/fl_form.dart';
+import 'package:fl_form/formfield/value_converter.dart';
 import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
 import 'package:fl_form/formfield/widget/label_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:tuple/tuple.dart';
+import 'package:flutter/services.dart';
 
 import 'fl_form_field_theme.dart';
 import 'widget/default_error_builder.dart';
 
-typedef ErrorBuilder = Widget Function(BuildContext context, String errorText);
-
-class FlTextFormField extends FormField<String> {
-  @Deprecated("Use FlPasswordFormField instead.")
-  final bool isPassword;
+class FlDoubleFormField extends FormField<double> {
   final TextEditingController? textEditingController;
 
-  FlTextFormField({
+  final ValueConverter<double> doubleConverter;
+
+  FlDoubleFormField({
     super.key,
     required String label,
     String? placeholderText,
     bool isRequired = false,
-    FormFieldValidator<String>? validator,
-    ValueChanged<String>? onChanged,
-    String? initialValue,
+    FormFieldValidator<double>? validator,
+    ValueChanged<double>? onChanged,
+    double? initialValue,
     AutovalidateMode? autovalidateMode,
-    FormFieldSetter<String>? onSaved,
+    FormFieldSetter<double>? onSaved,
     String? restorationId,
     bool enabled = true,
-    @Deprecated("Use FlPasswordFormField instead.") this.isPassword = false,
-    int minLines = 1,
-    int maxLines = 1,
     Widget? prefixIcon,
+    Widget? suffixIcon,
     bool autofocus = false,
-    TextInputType? keyboardType,
+    TextInputType? keyboardType = TextInputType.number,
     Brightness? keyboardAppearance,
     TextInputAction? textInputAction,
     int? maxLength,
-    bool autocorrect = true,
-    bool enableSuggestions = true,
+    bool autocorrect = false,
+    bool enableSuggestions = false,
     Iterable<String>? autofillHints,
-    double? paddingLeftError,
     String? helperText,
-    @Deprecated("Use FlPasswordFormField instead.") Tuple2<Widget, Widget>? iconObscureText,
     ErrorBuilder errorBuilder = defaultErrorBuilder,
     this.textEditingController,
+    this.doubleConverter = const DoubleConverter(),
   }) : super(
          validator: validator,
          onSaved: onSaved,
@@ -50,7 +47,7 @@ class FlTextFormField extends FormField<String> {
          restorationId: restorationId,
          enabled: enabled,
          builder: (field) {
-           final state = field as FlTextFormFieldState;
+           final state = field as FlDoubleFormFieldState;
 
            return Column(
              crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -59,10 +56,7 @@ class FlTextFormField extends FormField<String> {
                TextField(
                  controller: state.textEditingController,
                  cursorWidth: 1,
-                 obscureText: state.obscureText,
                  enabled: enabled,
-                 maxLines: maxLines,
-                 minLines: minLines,
                  autofocus: autofocus,
                  keyboardAppearance: keyboardAppearance,
                  keyboardType: keyboardType,
@@ -71,9 +65,13 @@ class FlTextFormField extends FormField<String> {
                  autocorrect: autocorrect,
                  enableSuggestions: enableSuggestions,
                  autofillHints: autofillHints,
+                 inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^([-+])?[0-9]*[.]?[0-9]*'))],
                  onChanged: (value) {
-                   onChanged?.call(value);
-                   state.didChange(value);
+                   double? v = doubleConverter.fromUiString(value);
+                   if (v != null) {
+                     onChanged?.call(v);
+                     state.didChange(v);
+                   }
                  },
                  style: enabled
                      ? Theme.of(field.context).extension<FlFormFieldTheme>()?.style
@@ -84,16 +82,7 @@ class FlTextFormField extends FormField<String> {
                    helperText: helperText,
                    placeholderText: placeholderText,
                    prefixIcon: prefixIcon,
-                   suffixIcon: isPassword
-                       ? GestureDetector(
-                           onTap: () {
-                             state.toglgleShowPass();
-                           },
-                           child: state.obscureText
-                               ? (iconObscureText?.item1 ?? const Icon(Icons.visibility_outlined))
-                               : (iconObscureText?.item2 ?? const Icon(Icons.visibility_off_outlined)),
-                         )
-                       : null,
+                   suffixIcon: suffixIcon,
                  ).create(field.context),
                ),
                if (state.hasError) errorBuilder(state.context, state.errorText!),
@@ -102,43 +91,53 @@ class FlTextFormField extends FormField<String> {
          },
        );
   @override
-  FormFieldState<String> createState() => FlTextFormFieldState();
+  FormFieldState<double> createState() => FlDoubleFormFieldState();
 }
 
-class FlTextFormFieldState extends FormFieldState<String> {
+class FlDoubleFormFieldState extends FormFieldState<double> {
   late TextEditingController textEditingController;
 
-  late bool obscureText;
-
   @override
-  FlTextFormField get widget => super.widget as FlTextFormField;
-
-  void toglgleShowPass() {
-    setState(() {
-      obscureText = !obscureText;
-    });
-  }
+  FlDoubleFormField get widget => super.widget as FlDoubleFormField;
 
   @override
   void initState() {
     super.initState();
-    if (widget.isPassword) {
-      obscureText = true;
-    } else {
-      obscureText = false;
-    }
-
-    textEditingController = widget.textEditingController ?? TextEditingController(text: widget.initialValue);
+    textEditingController = widget.textEditingController ?? TextEditingController(text: widget.doubleConverter.toUiString(widget.initialValue));
   }
 
   @override
-  void didUpdateWidget(FlTextFormField oldWidget) {
+  void didUpdateWidget(FlDoubleFormField oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.initialValue != oldWidget.initialValue) {
       // when initialValue changed - maybe because you have an async call to retrieve the correct value and show the form field in the meantime with
       // a null-value, set the new initial value.
       setValue(widget.initialValue);
-      textEditingController.text = widget.initialValue ?? '';
+      textEditingController.text = widget.doubleConverter.toUiString(widget.initialValue) ?? "";
     }
+  }
+}
+
+class DoubleConverter implements ValueConverter<double> {
+  final int fractionDigits;
+
+  const DoubleConverter({this.fractionDigits = 1});
+
+  @override
+  double? fromUiString(String? value) {
+    if (value == null) return null;
+    try {
+      double? v = double.tryParse(value);
+      return v;
+    } catch (error) {
+      // ignore the error, do nothing
+      return null;
+    }
+  }
+
+  @override
+  String? toUiString(double? value) {
+    if (value == null) return null;
+    return value.toStringAsFixed(fractionDigits);
   }
 }
