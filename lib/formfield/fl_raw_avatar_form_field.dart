@@ -10,6 +10,14 @@ typedef FlRawAvatarFormFieldBuilder = Widget Function({
   String? error,
 });
 
+/// A raw, unstyled form field for handling avatar selection.
+///
+/// The [FlRawAvatarFormField] provides the basic functionality for picking an image
+/// and managing its state. It is intended to be used as a base for creating
+/// custom avatar form fields with specific styling.
+///
+/// The [builder] function is required and is used to construct the UI for the
+/// avatar field.
 class FlRawAvatarFormField extends FormField<FileOrLink> {
   static Future<FileOrLink?> pickFile() async {
     ImagePicker imagePicker = ImagePicker();
@@ -53,6 +61,11 @@ class FlRawAvatarFormField extends FormField<FileOrLink> {
         );
 }
 
+/// A class that represents either a local file or a network URL.
+///
+/// The [FileOrLink] class is used to handle images from different sources.
+/// It can hold either a [File] object for local images or a [String] URL for
+/// network images.
 class FileOrLink {
   final String? link;
   final File? file;

@@ -1,6 +1,4 @@
-import 'package:fl_form/formfield/widget/default_error_builder.dart';
-import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
-import 'package:fl_form/formfield/widget/label_widget.dart';
+import 'package:fl_form/formfield/widget/fl_readonly_field.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
@@ -10,9 +8,10 @@ import 'fl_form_field_theme.dart';
 class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
   FlDateRangeFormField({
     super.key,
-    Tuple2<DateTime, DateTime>? initialValue,
-    FormFieldSetter<Tuple2<DateTime, DateTime>>? onSaved,
-    FormFieldValidator<Tuple2<DateTime, DateTime>>? validator,
+    super.initialValue,
+    super.onSaved,
+    super.validator,
+    ValueChanged<Tuple2<DateTime, DateTime>?>? onChanged,
     EdgeInsetsGeometry? contentPadding,
     AutovalidateMode? autovalidateMode,
     required String label,
@@ -26,9 +25,6 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
     String toText = 'To',
     String? helperText,
   }) : super(
-         initialValue: initialValue,
-         onSaved: onSaved,
-         validator: validator,
          builder: (state) {
            String valueDisplay = '';
            if (state.value != null) {
@@ -37,74 +33,58 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
            } else {
              valueDisplay = '';
            }
-           return Column(
-             crossAxisAlignment: CrossAxisAlignment.stretch,
-             children: [
-               LabelWidget(label: label, isRequired: isRequired),
-               GestureDetector(
-                 behavior: HitTestBehavior.opaque,
-                 onTap: () {
-                   showDialog<DateTimeRange>(
-                     context: state.context,
-                     builder: (context) {
-                       return CalendarPopUp(
-                         initialStartDate: state.value?.item1,
-                         initialEndDate: state.value?.item2,
-                         maximumDate: DateTime.now().add(const Duration(days: 90)),
-                         textSelectDate: textSelectDate,
-                         textSelectEndDate: textSelectEndDate,
-                         fromText: fromText,
-                         toText: toText,
-                         minimumDate: DateTime.now(),
-                       );
-                       // return DateRangePickerDialog(
-                       //   firstDate: DateTime.now(),
-                       //   currentDate: DateTime.now(),
-                       //   lastDate: DateTime.now().add(
-                       //     const Duration(days: 90),
-                       //   ),
-                       // );
-                     },
-                   ).then((value) {
-                     if (value != null) {
-                       state.didChange(Tuple2(value.start, value.end));
-                     }
-                   });
+           return FlReadonlyField(
+             label: label,
+             isRequired: isRequired,
+             enabled: enabled,
+             hasError: state.hasError,
+             errorText: state.errorText,
+             helperText: helperText,
+             //             autofocus: autofocus,
+             onTap: () {
+               showDialog<DateTimeRange>(
+                 context: state.context,
+                 builder: (context) {
+                   return CalendarPopUp(
+                     initialStartDate: state.value?.item1,
+                     initialEndDate: state.value?.item2,
+                     maximumDate: DateTime.now().add(const Duration(days: 90)),
+                     textSelectDate: textSelectDate,
+                     textSelectEndDate: textSelectEndDate,
+                     fromText: fromText,
+                     toText: toText,
+                     minimumDate: DateTime.now(),
+                   );
                  },
-                 child: InputDecorator(
-                   decoration: InputDecorationBuilder(
-                     enabled: enabled,
-                     hasError: state.hasError,
-                     helperText: helperText,
-                     placeholderText: placeholderText,
-                     prefixIcon: prefixIcon,
-                   ).create(state.context),
-                   isEmpty: false,
-                   child: Row(
-                     crossAxisAlignment: CrossAxisAlignment.center,
-                     children: [
-                       Expanded(
-                         child: DateInfo(icon: prefixIcon ?? SizedBox.shrink(), hint: 'Start date', dateTime: state.value?.item1),
-                       ),
-                       Container(
-                         height: 16,
-                         width: 2,
-                         margin: const EdgeInsets.symmetric(horizontal: 8).copyWith(right: 16),
-                         color: Theme.of(state.context).dividerColor,
-                       ),
-                       Expanded(
-                         child: DateInfo(icon: prefixIcon ?? SizedBox.shrink(), hint: 'End date', dateTime: state.value?.item2),
-                       ),
-                     ],
-                   ),
+               ).then((value) {
+                 if (value != null) {
+                   state.didChange(Tuple2(value.start, value.end));
+                 }
+               });
+             },
+             content: Row(
+               crossAxisAlignment: CrossAxisAlignment.center,
+               children: [
+                 Expanded(
+                   child: DateInfo(icon: prefixIcon ?? SizedBox.shrink(), hint: 'Start date', dateTime: state.value?.item1),
                  ),
-               ),
-               if (state.hasError) defaultErrorBuilder(state.context, state.errorText!),
-             ],
+                 Container(
+                   height: 16,
+                   width: 2,
+                   margin: const EdgeInsets.symmetric(horizontal: 8).copyWith(right: 16),
+                   color: Theme.of(state.context).dividerColor,
+                 ),
+                 Expanded(
+                   child: DateInfo(icon: prefixIcon ?? SizedBox.shrink(), hint: 'End date', dateTime: state.value?.item2),
+                 ),
+               ],
+             ),
            );
          },
        );
 }
+
+//////////////////////////////////////////////////////////////////////////////
 
 class DateInfo extends StatelessWidget {
   final String hint;

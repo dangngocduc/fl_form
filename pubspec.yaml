@@ -11,7 +11,7 @@ dependencies:
   calendar_date_picker2: ^2.0.1
   flutter:
     sdk: flutter
-  image_picker: ^1.1.2
+  image_picker: ^1.2.1
   intl: any
   stream_transform: ^2.1.1
   tuple: ^2.0.2

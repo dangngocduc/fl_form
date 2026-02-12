@@ -1,50 +1,32 @@
+import 'package:fl_form/fl_form.dart';
 import 'package:flutter/material.dart';
 
-typedef ContentSelectedBuilder<T> = Widget Function(
-    List<T>? datas, BuildContext context);
-
-typedef ValueSelectorWidgetBuilder<T> = Widget Function(
-    BuildContext context, T value, bool isSelected);
-
 class MultipleItemPickerBottomSheet<T> extends StatefulWidget {
-  ///Show value selected on formfield
-  final ValueSelectorWidgetBuilder<T> itemBuilder;
-
   ///List options of picker
-  final List<T> options;
+  final List<FormFieldOption<T>> options;
 
   ///current option selected of picker
   final List<T>? currentOption;
 
-  static Future<List<T>?> show<T>(
-    BuildContext context,
-    ValueSelectorWidgetBuilder<T> itemBuilder,
-    List<T> options,
-    List<T>? currentOption,
-  ) {
+  final FormFieldWidgetBuilder builder;
+
+  static Future<List<T>?> show<T>(BuildContext context, List<FormFieldOption<T>> options, List<T>? currentOption, FormFieldWidgetBuilder builder) {
     return showModalBottomSheet<List<T>>(
       context: context,
       showDragHandle: true,
       builder: (context) {
-        return MultipleItemPickerBottomSheet<T>(
-          itemBuilder: itemBuilder,
-          options: options,
-          currentOption: currentOption,
-        );
+        return MultipleItemPickerBottomSheet<T>(options: options, currentOption: currentOption, builder: builder);
       },
     );
   }
 
-  const MultipleItemPickerBottomSheet({
-    Key? key,
-    required this.itemBuilder,
-    required this.options,
-    required this.currentOption,
-  }) : super(key: key);
+  const MultipleItemPickerBottomSheet({super.key, required this.options, required this.currentOption, required this.builder});
 
   @override
   State<MultipleItemPickerBottomSheet<T>> createState() => _State<T>();
 }
+
+//////////////////////////////////////////////////////////////////////////////
 
 class _State<T> extends State<MultipleItemPickerBottomSheet<T>> {
   late List<T> currentOption;
@@ -58,10 +40,7 @@ class _State<T> extends State<MultipleItemPickerBottomSheet<T>> {
   @override
   Widget build(BuildContext context) {
     if (widget.options.isEmpty) {
-      return const SizedBox(
-        height: 200,
-        child: Text('Empty Data'),
-      );
+      return const SizedBox(height: 200, child: Text('Empty Data'));
     }
     return Column(
       children: [
@@ -72,21 +51,17 @@ class _State<T> extends State<MultipleItemPickerBottomSheet<T>> {
             itemBuilder: (context, index) {
               return InkWell(
                 onTap: () {
-                  if (currentOption.contains(widget.options[index])) {
+                  if (currentOption.contains(widget.options[index].value)) {
                     setState(() {
-                      currentOption.remove(widget.options[index]);
+                      currentOption.remove(widget.options[index].value);
                     });
                   } else {
                     setState(() {
-                      currentOption.add(widget.options[index]);
+                      currentOption.add(widget.options[index].value);
                     });
                   }
                 },
-                child: widget.itemBuilder(
-                  context,
-                  widget.options[index],
-                  currentOption.contains(widget.options[index]),
-                ),
+                child: widget.builder.buildForList(context, widget.options[index], currentOption.contains(widget.options[index].value)),
               );
             },
           ),
@@ -95,11 +70,11 @@ class _State<T> extends State<MultipleItemPickerBottomSheet<T>> {
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
           child: ElevatedButton(
             onPressed: () {
-              Navigator.pop(context, currentOption);
+              Navigator.pop(context, currentOption.isEmpty ? null : currentOption);
             },
             child: const Text('Submit'),
           ),
-        )
+        ),
       ],
     );
   }

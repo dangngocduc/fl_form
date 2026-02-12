@@ -4,6 +4,11 @@ import 'package:flutter/material.dart';
 typedef FlButtonStateBuilder = Widget Function(
     BuildContext context, FlButtonState state);
 
+/// A widget that manages the state of a button based on an asynchronous operation.
+///
+/// The [FlButtonStateAsync] widget takes a [Future] and a [builder] function.
+/// The [builder] is called with the current [FlButtonState], which can be used
+/// to display different UI for each state (e.g., a loading indicator).
 class FlButtonStateAsync extends StatefulWidget {
   final Future? future;
   final FlButtonStateBuilder builder;
@@ -60,6 +65,11 @@ class _FlButtonStateAsyncState extends State<FlButtonStateAsync> {
   }
 }
 
+/// An enum representing the possible states of a button.
+///
+/// - [disable]: The button is disabled and cannot be interacted with.
+/// - [enable]: The button is enabled and can be tapped.
+/// - [loading]: The button is in a loading state, typically showing a progress indicator.
 enum FlButtonState {
   disable,
   enable,

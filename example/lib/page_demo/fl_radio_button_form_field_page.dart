@@ -1,16 +1,14 @@
-import 'package:fl_form/formfield/fl_radio_button_form_field.dart';
+import 'package:fl_form/fl_form.dart';
 import 'package:flutter/material.dart';
 
 class FlRadioButtonFormFieldPage extends StatefulWidget {
   const FlRadioButtonFormFieldPage({Key? key}) : super(key: key);
 
   @override
-  State<FlRadioButtonFormFieldPage> createState() =>
-      _FlRadioButtonFormFieldPageState();
+  State<FlRadioButtonFormFieldPage> createState() => _FlRadioButtonFormFieldPageState();
 }
 
-class _FlRadioButtonFormFieldPageState
-    extends State<FlRadioButtonFormFieldPage> {
+class _FlRadioButtonFormFieldPageState extends State<FlRadioButtonFormFieldPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,15 +19,13 @@ class _FlRadioButtonFormFieldPageState
           children: [
             FlRadioButtonFormField(
               label: 'Select Item',
-              options: const [
-                'Item 1',
-                'Item 2',
-                'Item 3',
+              options: [
+                FormFieldOption(value: 'Item 1'),
+                FormFieldOption(value: 'Item 2'),
+                FormFieldOption(value: 'Item 3'),
               ],
             ),
-            const SizedBox(
-              height: 24,
-            ),
+            const SizedBox(height: 24),
             FlRadioButtonFormField(
               isRequired: true,
               autovalidateMode: AutovalidateMode.always,
@@ -38,12 +34,12 @@ class _FlRadioButtonFormFieldPageState
                 return null;
               },
               label: 'Select Item',
-              options: const [
-                'Option 1',
-                'Option 2',
-                'Option 3',
+              options: [
+                FormFieldOption(value: 'Option 1', label: 'Option 1'),
+                FormFieldOption(value: 'Option 2', label: 'Option 2'),
+                FormFieldOption(value: 'Option 3', label: 'Option 3'),
               ],
-            )
+            ),
           ],
         ),
       ),

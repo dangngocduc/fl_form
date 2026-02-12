@@ -7,7 +7,17 @@ import 'package:intl/intl.dart';
 
 import 'fl_form_field_theme.dart';
 
+/// A form field for entering monetary values.
+///
+/// The [FlMoneyFormField] displays a text input field with a currency symbol and
+/// provides formatting for monetary values. It is designed to be used within a
+/// [Form] and supports validation and error handling.
 class FlMoneyFormField extends FormField<double> {
+  /// Creates a new instance of [FlMoneyFormField].
+  ///
+  /// The [label] is a required string that describes the money field.
+  /// The [currency] is the currency symbol to be displayed.
+  /// The [initialValue] is the initial value of the field.
   FlMoneyFormField({
     super.key,
     double? initialValue,
@@ -117,11 +127,9 @@ class FlMoneyTextController extends TextEditingController {
 
   FlMoneyTextController(double value) {
     addListener(() {
-      developer.log('update: $text', name: 'FlMoneyFormField');
-      // var previous = this._lastUpdatedText;
+        // var previous = this._lastUpdatedText;
       updateText(text);
     });
-    developer.log('NumberFormat.decimalPattern().format(value) ${NumberFormat.decimalPattern().format(value)}', name: 'FlMoneyFormField');
     text = NumberFormat.decimalPattern().format(value);
     updateText(text);
   }
@@ -160,7 +168,6 @@ class FlMoneyTextController extends TextEditingController {
       this.text = '${NumberFormat.decimalPattern().format(int.parse(first))}.$sencond';
     } else {
       if (newText.isNotEmpty) {
-        developer.log('NumberFormat().format(int.parse(text)) ${NumberFormat.decimalPattern().format(int.parse(newText))}', name: 'FlMoneyFormField');
         this.text = NumberFormat.decimalPattern().format(int.parse(newText));
       } else {
         this.text = newText;

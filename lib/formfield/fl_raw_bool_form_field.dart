@@ -1,35 +1,21 @@
 import 'package:flutter/material.dart';
 
-typedef FlRawBoolFormFieldBuilder = Widget Function(
-  BuildContext context,
-  bool? data,
-  ValueChanged<bool?> didChange,
-);
+typedef FlRawBoolFormFieldBuilder = Widget Function(BuildContext context, bool? data, ValueChanged<bool?> didChange);
 
 class FlRawBoolFormField extends FormField<bool> {
   FlRawBoolFormField({
     super.key,
-    bool initialValue = false,
+    bool super.initialValue = false,
     required String title,
-    bool enabled = true,
-    AutovalidateMode? autovalidateMode,
-    FormFieldSetter<bool>? onSaved,
-    FormFieldValidator<bool>? validator,
-    String? restorationId,
+    super.enabled,
+    super.autovalidateMode,
+    super.onSaved,
+    super.validator,
+    super.restorationId,
     required FlRawBoolFormFieldBuilder rawBuilder,
   }) : super(
-          initialValue: initialValue,
-          enabled: enabled,
-          onSaved: onSaved,
-          restorationId: restorationId,
-          validator: validator,
-          autovalidateMode: autovalidateMode,
-          builder: (field) {
-            return rawBuilder(
-              field.context,
-              field.value,
-              field.didChange,
-            );
-          },
-        );
+         builder: (field) {
+           return rawBuilder(field.context, field.value, field.didChange);
+         },
+       );
 }

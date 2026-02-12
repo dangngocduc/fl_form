@@ -1,54 +1,32 @@
 import 'package:flutter/material.dart';
 
-typedef ContentSelectedBuilder<T> = Widget Function(
-    T data, BuildContext context);
-
-typedef ValueSelectorWidgetBuilder<T> = Widget Function(
-    BuildContext context, T value, bool isSelected);
+import '../form_field_option.dart';
 
 class SingleItemPickerBottomSheet<T> extends StatelessWidget {
-  ///Show value selected on formfield
-  final ValueSelectorWidgetBuilder<T> itemBuilder;
-
   ///List options of picker
-  final List<T> options;
+  final List<FormFieldOption<T>> options;
 
   ///current option selected of picker
   final T? currentOption;
 
-  static Future<T?> show<T>(
-    BuildContext context,
-    ValueSelectorWidgetBuilder<T> itemBuilder,
-    List<T> options,
-    T? currentOption,
-  ) {
+  final FormFieldWidgetBuilder builder;
+
+  static Future<T?> show<T>(BuildContext context, List<FormFieldOption<T>> options, T? currentOption, FormFieldWidgetBuilder builder) {
     return showModalBottomSheet<T>(
       context: context,
       showDragHandle: true,
       builder: (context) {
-        return SingleItemPickerBottomSheet<T>(
-          itemBuilder: itemBuilder,
-          options: options,
-          currentOption: currentOption,
-        );
+        return SingleItemPickerBottomSheet<T>(options: options, currentOption: currentOption, builder: builder);
       },
     );
   }
 
-  const SingleItemPickerBottomSheet({
-    Key? key,
-    required this.itemBuilder,
-    required this.options,
-    required this.currentOption,
-  }) : super(key: key);
+  const SingleItemPickerBottomSheet({super.key, required this.options, required this.currentOption, required this.builder});
 
   @override
   Widget build(BuildContext context) {
     if (options.isEmpty) {
-      return const SizedBox(
-        height: 200,
-        child: Text('Empty Data'),
-      );
+      return const SizedBox(height: 200, child: Text('Empty Data'));
     }
     return ListView.builder(
       shrinkWrap: true,
@@ -58,16 +36,9 @@ class SingleItemPickerBottomSheet<T> extends StatelessWidget {
           onTap: options[index] == currentOption
               ? null
               : () {
-                  Navigator.pop(
-                    context,
-                    options[index],
-                  );
+                  Navigator.pop(context, options[index].value);
                 },
-          child: itemBuilder(
-            context,
-            options[index],
-            options[index] == currentOption,
-          ),
+          child: builder.buildForList(context, options[index], options[index].value == currentOption),
         );
       },
     );

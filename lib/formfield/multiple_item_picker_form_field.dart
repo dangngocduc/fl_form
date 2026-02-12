@@ -1,7 +1,5 @@
-import 'package:fl_form/formfield/bottom_sheet/item_picker_default_widget.dart';
-import 'package:fl_form/formfield/widget/default_error_builder.dart';
-import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
-import 'package:fl_form/formfield/widget/label_widget.dart';
+import 'package:fl_form/fl_form.dart';
+import 'package:fl_form/formfield/widget/fl_readonly_field.dart';
 import 'package:flutter/material.dart';
 
 import 'bottom_sheet/multiple_item_picker_bottom_sheet.dart';
@@ -11,62 +9,57 @@ class MultipleItemPickerFormField<T> extends FormField<List<T>> {
     super.key,
     required String label,
     String? placeholderText,
-    ContentSelectedBuilder<T>? contentSelectedBuilder,
-    ValueSelectorWidgetBuilder<T>? itemListBuilder,
     Widget? prefixIcon,
-    FormFieldValidator<List<T>>? validator,
-    FormFieldSetter<List<T>>? onSaved,
-    AutovalidateMode? autovalidateMode,
-    bool enabled = true,
-    List<T>? initialValue,
+    super.validator,
+    super.onSaved,
+    ValueChanged<List<T>>? onChanged,
+    ValueChanged<T>? onDelete,
+    super.autovalidateMode,
+    super.enabled,
+    super.initialValue,
     bool isRequired = false,
-    required List<T> options,
+    required List<FormFieldOption<T>> options,
+    FormFieldWidgetBuilder builder = const DefaultFormFieldWidgetBuilder(),
     String? helperText,
   }) : super(
-         initialValue: initialValue,
-         validator: validator,
-         onSaved: onSaved,
-         autovalidateMode: autovalidateMode,
-         enabled: enabled,
          builder: (field) {
            final state = field as MultipleItemPickerFormFieldState<T>;
-           return Column(
-             crossAxisAlignment: CrossAxisAlignment.stretch,
-             children: [
-               LabelWidget(label: label, isRequired: isRequired),
-               GestureDetector(
-                 behavior: HitTestBehavior.opaque,
-                 onTap: () {
-                   MultipleItemPickerBottomSheet.show<T>(
-                     state.context,
-                     itemListBuilder ?? (context, value, isSelected) => ItemPickerDefaultWidget(data: value, isSelected: isSelected),
-                     options,
-                     state.value,
-                   ).then((value) {
-                     if (value != null) {
-                       state.didChange(value);
-                     }
-                   });
-                 },
-                 child: InputDecorator(
-                   decoration: InputDecorationBuilder(
-                     enabled: enabled,
-                     hasError: state.hasError,
-                     helperText: helperText,
-                     placeholderText: placeholderText,
-                     prefixIcon: prefixIcon,
-                     suffixIcon: const Icon(Icons.keyboard_arrow_down),
-                   ).create(field.context),
-                   isEmpty: state.value == null || state.value!.isEmpty,
-                   child: state.value == null || state.value!.isEmpty
-                       ? null
-                       : (contentSelectedBuilder != null
-                             ? contentSelectedBuilder(state.value ?? [], state.context)
-                             : MultipleItemPickerDefaultDisplayValue(data: state.value!)),
-                 ),
-               ),
-               if (state.hasError) defaultErrorBuilder(state.context, state.errorText!),
-             ],
+           return FlReadonlyField(
+             label: label,
+             isRequired: isRequired,
+             enabled: enabled,
+             hasError: state.hasError,
+             placeholderText: placeholderText,
+             onTap: enabled
+                 ? () {
+                     MultipleItemPickerBottomSheet.show<T>(state.context, options, state.value, builder).then((value) {
+                       if (value != null) {
+                         state.didChange(value);
+                       }
+                     });
+                   }
+                 : null,
+             helperText: helperText,
+             errorText: state.errorText,
+             content: state.value == null || state.value!.isEmpty
+                 ? null
+                 : Wrap(
+                     spacing: 4,
+                     runSpacing: 4,
+                     children: state.value!
+                         .map(
+                           (v) => Chip(
+                             onDeleted: onDelete != null
+                                 ? () {
+                                     onDelete(v);
+                                   }
+                                 : null,
+                             label: builder.buildForContent(state.context, options.firstWhere((test) => test.value == v)),
+                           ),
+                         )
+                         .toList(),
+                   ),
+             suffixIcon: const Icon(Icons.keyboard_arrow_down),
            );
          },
        );
@@ -77,17 +70,9 @@ class MultipleItemPickerFormField<T> extends FormField<List<T>> {
   }
 }
 
+//////////////////////////////////////////////////////////////////////////////
+
 class MultipleItemPickerFormFieldState<T> extends FormFieldState<List<T>> {
   @override
   MultipleItemPickerFormField<T> get widget => super.widget as MultipleItemPickerFormField<T>;
-}
-
-class MultipleItemPickerDefaultDisplayValue extends StatelessWidget {
-  final Object data;
-
-  const MultipleItemPickerDefaultDisplayValue({super.key, required this.data});
-  @override
-  Widget build(BuildContext context) {
-    return Text(data.toString());
-  }
 }

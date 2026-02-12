@@ -3,6 +3,11 @@ import 'package:flutter/material.dart';
 
 import 'fl_button_state_async.dart';
 
+/// A widget that manages the state of a form body during an asynchronous operation.
+///
+/// The [FlFormBodyStateAsync] widget takes a [Future] and a [builder] function.
+/// While the [Future] is in progress, the form body is disabled to prevent user
+/// interaction. Once the [Future] completes, the form body is re-enabled.
 class FlFormBodyStateAsync extends StatefulWidget {
   final Future? future;
   final WidgetBuilder builder;

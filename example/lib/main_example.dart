@@ -1,3 +1,4 @@
+import 'package:example/page_demo/all_form_fields_page.dart';
 import 'package:example/page_demo/avatar_form_field_page.dart';
 import 'package:example/page_demo/bool_form_field_page.dart';
 import 'package:example/page_demo/date_form_field_page.dart';
@@ -13,18 +14,51 @@ import 'page_demo/item_picker_page.dart';
 import 'page_demo/multiple_item_picker_page.dart';
 
 class MainExample extends StatelessWidget {
-  const MainExample({Key? key}) : super(key: key);
+  final VoidCallback onToggleTheme;
+
+    const MainExample({Key? key, required this.onToggleTheme}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+            appBar: AppBar(
         centerTitle: true,
         title: const Text('Example'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.brightness_6),
+            onPressed: onToggleTheme,
+          ),
+        ],
       ),
-      body: ListView(
+            body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
         children: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Card(
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(
+                    builder: (context) {
+                      return AllFormFieldsPage(onToggleTheme: onToggleTheme);
+                    },
+                  ));
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Text('All Form Fields'),
+                      ),
+                      Icon(Icons.keyboard_arrow_right_outlined)
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12),
             child: Card(

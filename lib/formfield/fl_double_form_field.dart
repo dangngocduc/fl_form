@@ -1,11 +1,9 @@
 import 'package:fl_form/fl_form.dart';
 import 'package:fl_form/formfield/value_converter.dart';
-import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
-import 'package:fl_form/formfield/widget/label_widget.dart';
+import 'package:fl_form/formfield/widget/fl_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'fl_form_field_theme.dart';
 import 'widget/default_error_builder.dart';
 
 class FlDoubleFormField extends FormField<double> {
@@ -13,18 +11,19 @@ class FlDoubleFormField extends FormField<double> {
 
   final ValueConverter<double> doubleConverter;
 
+  final ValueChanged<double?>? onChanged;
   FlDoubleFormField({
     super.key,
     required String label,
     String? placeholderText,
     bool isRequired = false,
-    FormFieldValidator<double>? validator,
-    ValueChanged<double>? onChanged,
-    double? initialValue,
-    AutovalidateMode? autovalidateMode,
-    FormFieldSetter<double>? onSaved,
-    String? restorationId,
-    bool enabled = true,
+    super.validator,
+    this.onChanged,
+    super.initialValue,
+    super.autovalidateMode,
+    super.onSaved,
+    super.restorationId,
+    super.enabled,
     Widget? prefixIcon,
     Widget? suffixIcon,
     bool autofocus = false,
@@ -40,59 +39,37 @@ class FlDoubleFormField extends FormField<double> {
     this.textEditingController,
     this.doubleConverter = const DoubleConverter(),
   }) : super(
-         validator: validator,
-         onSaved: onSaved,
-         initialValue: initialValue,
-         autovalidateMode: autovalidateMode,
-         restorationId: restorationId,
-         enabled: enabled,
          builder: (field) {
            final state = field as FlDoubleFormFieldState;
 
-           return Column(
-             crossAxisAlignment: CrossAxisAlignment.stretch,
-             children: [
-               LabelWidget(label: label, isRequired: isRequired),
-               TextField(
-                 controller: state.textEditingController,
-                 cursorWidth: 1,
-                 enabled: enabled,
-                 autofocus: autofocus,
-                 keyboardAppearance: keyboardAppearance,
-                 keyboardType: keyboardType,
-                 maxLength: maxLength,
-                 textInputAction: textInputAction,
-                 autocorrect: autocorrect,
-                 enableSuggestions: enableSuggestions,
-                 autofillHints: autofillHints,
-                 inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^([-+])?[0-9]*[.]?[0-9]*'))],
-                 onChanged: (value) {
-                   double? v = doubleConverter.fromUiString(value);
-                   if (v != null) {
-                     onChanged?.call(v);
-                     state.didChange(v);
-                   }
-                 },
-                 style: enabled
-                     ? Theme.of(field.context).extension<FlFormFieldTheme>()?.style
-                     : Theme.of(field.context).extension<FlFormFieldTheme>()?.disableStyle,
-                 decoration: InputDecorationBuilder(
-                   enabled: enabled,
-                   hasError: state.hasError,
-                   helperText: helperText,
-                   placeholderText: placeholderText,
-                   prefixIcon: prefixIcon,
-                   suffixIcon: suffixIcon,
-                 ).create(field.context),
-               ),
-               if (state.hasError) errorBuilder(state.context, state.errorText!),
-             ],
+           return FlTextfield(
+             textEditingController: state.textEditingController,
+             label: label,
+             placeholderText: placeholderText,
+             isRequired: isRequired,
+             enabled: enabled,
+             hasError: state.hasError,
+             errorText: state.errorText,
+             helperText: helperText,
+             keyboardType: keyboardType,
+             keyboardAppearance: keyboardAppearance,
+             inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^([-+])?[0-9]*[.]?[0-9]*'))],
+             textInputAction: textInputAction,
+             maxLength: maxLength,
+             autocorrect: autocorrect,
+             enableSuggestions: enableSuggestions,
+             autofillHints: autofillHints,
+             prefixIcon: prefixIcon,
+             suffixIcon: suffixIcon,
+             autofocus: autofocus,
            );
          },
        );
   @override
   FormFieldState<double> createState() => FlDoubleFormFieldState();
 }
+
+//////////////////////////////////////////////////////////////////////////////
 
 class FlDoubleFormFieldState extends FormFieldState<double> {
   late TextEditingController textEditingController;
@@ -104,12 +81,28 @@ class FlDoubleFormFieldState extends FormFieldState<double> {
   void initState() {
     super.initState();
     textEditingController = widget.textEditingController ?? TextEditingController(text: widget.doubleConverter.toUiString(widget.initialValue));
+    textEditingController.addListener(listen);
+    //setValue(widget.initialValue);
+  }
+
+  @override
+  void dispose() {
+    textEditingController.removeListener(listen);
+    super.dispose();
+  }
+
+  void listen() {
+    setValue((widget.doubleConverter.fromUiString(textEditingController.text)));
+    widget.onChanged?.call(value);
   }
 
   @override
   void didUpdateWidget(FlDoubleFormField oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.initialValue != oldWidget.initialValue) {
+      textEditingController.removeListener(listen);
+      textEditingController = widget.textEditingController ?? TextEditingController(text: widget.doubleConverter.toUiString(widget.initialValue));
+      textEditingController.addListener(listen);
       // when initialValue changed - maybe because you have an async call to retrieve the correct value and show the form field in the meantime with
       // a null-value, set the new initial value.
       setValue(widget.initialValue);
@@ -117,6 +110,8 @@ class FlDoubleFormFieldState extends FormFieldState<double> {
     }
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////
 
 class DoubleConverter implements ValueConverter<double> {
   final int fractionDigits;

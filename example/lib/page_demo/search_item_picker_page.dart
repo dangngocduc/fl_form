@@ -23,10 +23,6 @@ class _SearchItemPickerPageState extends State<SearchItemPickerPage> {
                 FlSearchItemFormField<String>(
                   label: 'Select Item',
                   placeholderText: 'Select Item',
-                  contentSelectedBuilder: (data, context) => Text(data.toString()),
-                  itemBuilder: (context, value, child) {
-                    return ListTile(title: Text(value));
-                  },
                   onSearch: (keyword) async {
                     return ['Afghanistan', 'Aland Islands', 'Albania', 'Algeria', 'American Samoa', 'Andorra', 'Angola', 'Anguilla'];
                   },

@@ -1,112 +1,111 @@
-import 'package:fl_form/formfield/widget/default_error_builder.dart';
-import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
-import 'package:fl_form/formfield/widget/label_widget.dart';
+import 'package:fl_form/formfield/widget/fl_readonly_field.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
-import 'fl_form_field_theme.dart';
 
 class FlDateAndTimeFormField extends FormField<DateTime> {
   FlDateAndTimeFormField({
     DateFormat? dateFormat,
-    required DateTime firstDate,
-    required DateTime lastDate,
-    FormFieldValidator<DateTime>? validator,
-    FormFieldSetter<DateTime>? onSaved,
-    AutovalidateMode? autovalidateMode,
-    DateTime? initialValue,
+    DateTime? firstDate,
+    DateTime? lastDate,
+    super.validator,
+    super.onSaved,
+    ValueChanged<DateTime?>? onChanged,
+    super.autovalidateMode,
+    super.initialValue,
     required String label,
     String? placeholderText,
     bool isRequired = false,
     Widget? prefixIcon,
     String? helperText,
     bool enabled = true,
+    bool utc = false,
     super.key,
   }) : super(
          builder: (field) {
            final state = field as FlDateAndTimeFormFieldState;
-           return Column(
-             crossAxisAlignment: CrossAxisAlignment.stretch,
-             children: [
-               LabelWidget(label: label, isRequired: isRequired),
-               GestureDetector(
-                 behavior: HitTestBehavior.opaque,
-                 onTap: () {},
-                 child: InputDecorator(
-                   decoration: InputDecorationBuilder(
-                     enabled: enabled,
-                     hasError: state.hasError,
-                     helperText: helperText,
-                     placeholderText: placeholderText,
-                   ).create(field.context),
-                   isEmpty: false,
-                   child: Row(
-                     children: [
-                       Expanded(
-                         child: GestureDetector(
-                           behavior: HitTestBehavior.opaque,
-                           onTap: enabled
-                               ? () {
-                                   showDatePicker(
-                                     context: state.context,
-                                     initialDate: state.value ?? DateTime.now(),
-                                     firstDate: firstDate,
-                                     lastDate: lastDate,
-                                   ).then((value) {
-                                     if (value != null) {
-                                       if (state.value == null) {
-                                         state.didChange(value);
-                                       } else {
-                                         state.didChange(DateTime(value.year, value.month, value.day, state.value!.hour, state.value!.minute));
-                                       }
-                                     }
-                                   });
-                                 }
-                               : null,
-                           child: Text(
-                             state.value == null ? 'YYYY/MM/DD' : (dateFormat ?? DateFormat(DateFormat.YEAR_MONTH_DAY)).format(state.value!),
-                             style: state.value == null
-                                 ? Theme.of(field.context).extension<FlFormFieldTheme>()?.placeHolderStyle
-                                 : Theme.of(field.context).extension<FlFormFieldTheme>()?.style,
-                           ),
-                         ),
-                       ),
-                       const SizedBox(width: 32),
-                       GestureDetector(
-                         behavior: HitTestBehavior.opaque,
-                         onTap: enabled
-                             ? () {
-                                 if (state.value != null) {
-                                   showTimePicker(context: state.context, initialTime: TimeOfDay.fromDateTime(state.value!)).then((value) {
-                                     if (value != null) {
-                                       state.didChange(DateTime(state.value!.year, state.value!.month, state.value!.day, value.hour, value.minute));
-                                     }
-                                   });
-                                 }
+           dateFormat ??= DateFormat(DateFormat.YEAR_MONTH_DAY);
+           return FlReadonlyField(
+             label: label,
+             placeholderText: placeholderText,
+             isRequired: isRequired,
+             enabled: enabled,
+             hasError: state.hasError,
+             errorText: state.errorText,
+             helperText: helperText,
+             //             autofocus: autofocus,
+             content: Row(
+               children: [
+                 Expanded(
+                   child: InkWell(
+                     onTap: enabled
+                         ? () {
+                             showDatePicker(
+                               context: state.context,
+                               initialDate: state.value ?? DateTime.now(),
+                               firstDate: firstDate ?? DateTime.now().add(Duration(days: -3650)),
+                               lastDate: lastDate ?? DateTime.now().add(Duration(days: 3650)),
+                             ).then((value) {
+                               if (value == null) {
+                                 // cancel
+                                 return;
                                }
-                             : null,
-                         child: Text(
-                           state.value == null ? 'HH:MM' : TimeOfDay.fromDateTime(state.value!).format(state.context),
-                           style: state.value == null
-                               ? Theme.of(field.context).extension<FlFormFieldTheme>()?.placeHolderStyle
-                               : Theme.of(field.context).extension<FlFormFieldTheme>()?.style,
-                         ),
-                       ),
-                     ],
+                               if (utc) {
+                                 state.didChange(DateTime.utc(value.year, value.month, value.day, state.value?.hour ?? 0, state.value?.minute ?? 0));
+                               } else {
+                                 state.didChange(DateTime(value.year, value.month, value.day, state.value?.hour ?? 0, state.value?.minute ?? 0));
+                               }
+                               if (onChanged != null) {
+                                 onChanged(state.value);
+                               }
+                             });
+                           }
+                         : null,
+                     child: Text(state.value == null ? dateFormat?.pattern ?? 'YYYY/MM/DD' : dateFormat!.format(state.value!)),
                    ),
                  ),
-               ),
-               if (state.hasError) defaultErrorBuilder(state.context, state.errorText!),
-             ],
+                 const SizedBox(width: 32),
+                 InkWell(
+                   onTap: enabled
+                       ? () {
+                           if (state.value != null) {
+                             showTimePicker(context: state.context, initialTime: TimeOfDay.fromDateTime(state.value!)).then((value) {
+                               if (value == null) {
+                                 // cancel
+                                 return;
+                               }
+                               _change(state, value, utc, onChanged, firstDate, lastDate);
+                             });
+                           }
+                         }
+                       : null,
+                   child: Text(state.value == null ? 'HH:MM' : TimeOfDay.fromDateTime(state.value!).format(state.context)),
+                 ),
+               ],
+             ),
            );
          },
-         validator: validator,
-         onSaved: onSaved,
-         initialValue: initialValue,
-         autovalidateMode: autovalidateMode,
        );
+
   @override
   FlDateAndTimeFormFieldState createState() => FlDateAndTimeFormFieldState();
+}
+
+void _change(var state, TimeOfDay timeOfDay, bool utc, ValueChanged<DateTime?>? onChanged, DateTime? firstDate, DateTime? lastDate) {
+  DateTime value;
+  if (utc) {
+    value = (DateTime.utc(state.value!.year, state.value!.month, state.value!.day, timeOfDay.hour, timeOfDay.minute));
+  } else {
+    value = (DateTime(state.value!.year, state.value!.month, state.value!.day, timeOfDay.hour, timeOfDay.minute));
+  }
+  if (firstDate != null && value.isBefore(firstDate)) {
+    value = firstDate;
+  } else if (lastDate != null && value.isAfter(lastDate)) {
+    value = lastDate;
+  }
+  state.didChange(value);
+  if (onChanged != null) {
+    onChanged(state.value);
+  }
 }
 
 class FlDateAndTimeFormFieldState extends FormFieldState<DateTime> {

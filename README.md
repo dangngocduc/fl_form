@@ -63,7 +63,7 @@ This package provides a set of pre-built `FormField` widgets that integrate seam
 - Date, Time, Duration
 - Single Item Picker
 - Multiple Item Picker
-- Bool value
+- Switch (Boolean)
 - Radio Button
 - CheckBox Group
 
@@ -154,17 +154,15 @@ Example Simple Text
     ),
 ```
 
-Example Password Text
+### FlPasswordFormField
 
-``` dart
-    FlTextFormField(
+```dart
+    FlPasswordFormField(
         prefixIcon: const Icon(Icons.lock),
         label: 'Password',
         placeholderText: '* * * * * *',
         isRequired: true,
-        isPassword: true,
     ),
-
 ```
 
 Example Area Text
@@ -178,6 +176,16 @@ Example Area Text
         validator: (value) {
         return 'Description invalid';
         },
+    ),
+```
+
+### FlMoneyFormField
+
+```dart
+    FlMoneyFormField(
+        label: 'Amount',
+        currency: 'USD',
+        initialValue: 1000.00,
     ),
 ```
 
@@ -308,44 +316,18 @@ Example Area Text
     ),
 ```
 
-### FlBoolFormField
+### FlSwitchFormField
 
-<img src="https://raw.githubusercontent.com/dangngocduc/fl_form/master/images/bool_form_field.png" width="50%"/>
 
-#### Default Bool FormField
+#### Default Switch FormField
 
 ```flutter
-    FlBoolFormField(
-        spacing: 16,
-        title: 'Select All',
+    FlSwitchFormField(
+        label: 'Select All',
     )
 ```
 
-#### Custom Bool FormField
 
-```flutter
-    FlRawBoolFormField(
-        title: 'Select All',
-        rawBuilder: (context, data, didChange) {
-        return Container(
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Row(
-            children: [
-                Checkbox(
-                value: data ?? false,
-                onChanged: (value) {
-                    didChange(value);
-                },
-                ),
-                const Expanded(
-                child: Text('Select All'),
-                )
-            ],
-            ),
-        );
-        },
-    ),
-```
 
 ### FlSingleItemPickerFormField
 

@@ -1,34 +1,54 @@
-import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
-import 'package:fl_form/formfield/widget/label_widget.dart';
+import 'package:fl_form/formfield/widget/fl_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
-import 'fl_form_field_theme.dart';
 import 'widget/default_error_builder.dart';
 
 typedef ErrorBuilder = Widget Function(BuildContext context, String errorText);
 
+/// A customizable text form field widget that provides a seamless and
+/// consistent look and feel for your forms.
+///
+/// The [FlTextFormField] is a versatile widget that can be used for various
+/// types of text input, including single-line, multi-line, and password fields.
+/// It integrates with Flutter's [Form] widget and provides built-in validation
+/// and error handling.
 class FlTextFormField extends FormField<String> {
   @Deprecated("Use FlPasswordFormField instead.")
   final bool isPassword;
   final TextEditingController? textEditingController;
+  final ValueChanged<String?>? onChanged;
 
+  /// Creates a new instance of [FlTextFormField].
+  ///
+  /// The [label] parameter is required and is used to display a label above the
+  /// text field.
+  ///
+  /// The [placeholderText] is an optional hint to be displayed when the field is
+  /// empty.
+  ///
+  /// The [isRequired] flag indicates whether the field must be filled.
+  ///
+  /// The [validator] function is used for custom validation.
+  ///
+  /// The [onChanged] callback is triggered when the field's value changes.
   FlTextFormField({
     super.key,
     required String label,
     String? placeholderText,
     bool isRequired = false,
-    FormFieldValidator<String>? validator,
-    ValueChanged<String>? onChanged,
-    String? initialValue,
-    AutovalidateMode? autovalidateMode,
-    FormFieldSetter<String>? onSaved,
-    String? restorationId,
-    bool enabled = true,
+    super.validator,
+    this.onChanged,
+    super.initialValue,
+    super.autovalidateMode,
+    super.onSaved,
+    super.restorationId,
+    super.enabled,
     @Deprecated("Use FlPasswordFormField instead.") this.isPassword = false,
     int minLines = 1,
     int maxLines = 1,
     Widget? prefixIcon,
+    Widget? suffixIcon,
     bool autofocus = false,
     TextInputType? keyboardType,
     Brightness? keyboardAppearance,
@@ -43,67 +63,46 @@ class FlTextFormField extends FormField<String> {
     ErrorBuilder errorBuilder = defaultErrorBuilder,
     this.textEditingController,
   }) : super(
-         validator: validator,
-         onSaved: onSaved,
-         initialValue: initialValue,
-         autovalidateMode: autovalidateMode,
-         restorationId: restorationId,
-         enabled: enabled,
          builder: (field) {
            final state = field as FlTextFormFieldState;
+           return FlTextfield(
+             textEditingController: state.textEditingController,
+             label: label,
+             placeholderText: placeholderText,
+             isRequired: isRequired,
+             enabled: enabled,
+             obscureText: state.obscureText,
+             hasError: state.hasError,
+             errorText: state.errorText,
+             helperText: helperText,
+             keyboardType: keyboardType,
+             keyboardAppearance: keyboardAppearance,
+             textInputAction: textInputAction,
+             maxLength: maxLength,
+             autocorrect: autocorrect,
+             enableSuggestions: enableSuggestions,
+             autofillHints: autofillHints,
+             prefixIcon: prefixIcon,
+             suffixIcon: isPassword
+                 ? InkWell(
+                     onTap: () {
+                       state.toggleShowPass();
+                     },
+                     child: state.obscureText
+                         ? (iconObscureText?.item1 ?? const Icon(Icons.visibility_outlined))
+                         : (iconObscureText?.item2 ?? const Icon(Icons.visibility_off_outlined)),
+                   )
+                 : suffixIcon,
 
-           return Column(
-             crossAxisAlignment: CrossAxisAlignment.stretch,
-             children: [
-               LabelWidget(label: label, isRequired: isRequired),
-               TextField(
-                 controller: state.textEditingController,
-                 cursorWidth: 1,
-                 obscureText: state.obscureText,
-                 enabled: enabled,
-                 maxLines: maxLines,
-                 minLines: minLines,
-                 autofocus: autofocus,
-                 keyboardAppearance: keyboardAppearance,
-                 keyboardType: keyboardType,
-                 maxLength: maxLength,
-                 textInputAction: textInputAction,
-                 autocorrect: autocorrect,
-                 enableSuggestions: enableSuggestions,
-                 autofillHints: autofillHints,
-                 onChanged: (value) {
-                   onChanged?.call(value);
-                   state.didChange(value);
-                 },
-                 style: enabled
-                     ? Theme.of(field.context).extension<FlFormFieldTheme>()?.style
-                     : Theme.of(field.context).extension<FlFormFieldTheme>()?.disableStyle,
-                 decoration: InputDecorationBuilder(
-                   enabled: enabled,
-                   hasError: state.hasError,
-                   helperText: helperText,
-                   placeholderText: placeholderText,
-                   prefixIcon: prefixIcon,
-                   suffixIcon: isPassword
-                       ? GestureDetector(
-                           onTap: () {
-                             state.toglgleShowPass();
-                           },
-                           child: state.obscureText
-                               ? (iconObscureText?.item1 ?? const Icon(Icons.visibility_outlined))
-                               : (iconObscureText?.item2 ?? const Icon(Icons.visibility_off_outlined)),
-                         )
-                       : null,
-                 ).create(field.context),
-               ),
-               if (state.hasError) errorBuilder(state.context, state.errorText!),
-             ],
+             autofocus: autofocus,
            );
          },
        );
   @override
   FormFieldState<String> createState() => FlTextFormFieldState();
 }
+
+//////////////////////////////////////////////////////////////////////////////
 
 class FlTextFormFieldState extends FormFieldState<String> {
   late TextEditingController textEditingController;
@@ -113,7 +112,7 @@ class FlTextFormFieldState extends FormFieldState<String> {
   @override
   FlTextFormField get widget => super.widget as FlTextFormField;
 
-  void toglgleShowPass() {
+  void toggleShowPass() {
     setState(() {
       obscureText = !obscureText;
     });
@@ -129,6 +128,19 @@ class FlTextFormFieldState extends FormFieldState<String> {
     }
 
     textEditingController = widget.textEditingController ?? TextEditingController(text: widget.initialValue);
+    textEditingController.addListener(listen);
+    setValue(widget.initialValue);
+  }
+
+  @override
+  void dispose() {
+    textEditingController.removeListener(listen);
+    super.dispose();
+  }
+
+  void listen() {
+    widget.onChanged?.call(textEditingController.text);
+    setValue(textEditingController.text);
   }
 
   @override

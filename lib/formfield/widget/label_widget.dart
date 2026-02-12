@@ -10,22 +10,19 @@ class LabelWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
-      child: RichText(
-        text: TextSpan(
-          style: Theme.of(context).extension<FlFormFieldTheme>()?.labelStyle ?? Theme.of(context).inputDecorationTheme.floatingLabelStyle,
-          children: [
-            TextSpan(text: label),
-            if (isRequired)
-              TextSpan(
-                text: ' *',
-                style:
-                    Theme.of(context).extension<FlFormFieldTheme>()?.labelStyle.copyWith(color: Colors.red) ??
-                    Theme.of(context).inputDecorationTheme.floatingLabelStyle?.copyWith(color: Colors.red),
-              ),
-          ],
-        ),
+    return RichText(
+      text: TextSpan(
+        style: Theme.of(context).extension<FlFormFieldTheme>()?.labelStyle ?? Theme.of(context).inputDecorationTheme.floatingLabelStyle,
+        children: [
+          TextSpan(text: label),
+          if (isRequired)
+            TextSpan(
+              text: ' *',
+              style:
+                  Theme.of(context).extension<FlFormFieldTheme>()?.labelStyle.copyWith(color: Colors.red) ??
+                  Theme.of(context).inputDecorationTheme.floatingLabelStyle?.copyWith(color: Colors.red),
+            ),
+        ],
       ),
     );
   }

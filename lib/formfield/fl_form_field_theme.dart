@@ -1,5 +1,23 @@
 import 'package:flutter/material.dart';
 
+/// A custom theme extension for `FlFormField` widgets.
+///
+/// This theme provides centralized styling for all `FlFormField` widgets in the app,
+/// ensuring a consistent look and feel. It includes styles for labels, input decorations,
+/// text, errors, and placeholders.
+///
+/// To use this theme, add it to your `MaterialApp`'s theme extensions:
+///
+/// ```dart
+/// MaterialApp(
+///   theme: ThemeData.light().copyWith(
+///     extensions: [
+///       FlFormFieldTheme.light(context),
+///     ],
+///   ),
+///   // ...
+/// );
+/// ```
 class FlFormFieldTheme extends ThemeExtension<FlFormFieldTheme> {
   final TextStyle labelStyle;
   final InputDecorationTheme inputDecorationTheme;
@@ -9,6 +27,15 @@ class FlFormFieldTheme extends ThemeExtension<FlFormFieldTheme> {
   final TextStyle placeHolderStyle;
   final Color fillColorDisable;
 
+  /// Creates a new instance of [FlFormFieldTheme].
+  ///
+  /// The [labelStyle] defines the style for the field's label.
+  /// The [inputDecorationTheme] provides the base decoration for the input field.
+  /// The [style] is the main text style for the input.
+  /// The [disableStyle] is used when the field is disabled.
+  /// The [errorStyle] is applied when a validation error occurs.
+  /// The [placeHolderStyle] is for the placeholder text.
+  /// The [fillColorDisable] is the background color when the field is disabled.
   FlFormFieldTheme({
     required this.labelStyle,
     required this.inputDecorationTheme,

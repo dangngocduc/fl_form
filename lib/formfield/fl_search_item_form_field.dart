@@ -1,80 +1,69 @@
-import 'package:fl_form/formfield/bottom_sheet/single_item_picker_bottom_sheet.dart';
+import 'package:fl_form/fl_form.dart';
 import 'package:fl_form/formfield/dialog/fl_search_page.dart';
-import 'package:fl_form/formfield/widget/default_error_builder.dart';
-import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
-import 'package:fl_form/formfield/widget/label_widget.dart';
+import 'package:fl_form/formfield/widget/fl_readonly_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class FlSearchItemFormField<T> extends FormField<T> {
   final OnSearch<T> onSearch;
-  final ValueWidgetBuilder<T> itemBuilder;
+
   FlSearchItemFormField({
     super.key,
     required String label,
     String? placeholderText,
-    ContentSelectedBuilder<T>? contentSelectedBuilder,
-    ValueSelectorWidgetBuilder<T>? itemListBuilder,
     Widget? prefixIcon,
+    FormFieldWidgetBuilder builder = const DefaultFormFieldWidgetBuilder(),
+    WidgetBuilder? loadingBuilder,
     super.validator,
     super.onSaved,
+    ValueChanged<T?>? onChanged,
     super.autovalidateMode,
     EdgeInsetsGeometry? contentPadding,
     super.enabled,
     super.initialValue,
     required this.onSearch,
-    required this.itemBuilder,
     String? helperText,
     bool isRequired = false,
   }) : super(
          builder: (field) {
            final state = field as FlSearchItemFormFieldState<T>;
-           return Column(
-             crossAxisAlignment: CrossAxisAlignment.stretch,
-             children: [
-               LabelWidget(label: label, isRequired: isRequired),
-               GestureDetector(
-                 behavior: HitTestBehavior.opaque,
-                 onTap: () {
-                   Navigator.push<T>(
-                     state.context,
-                     MaterialPageRoute(
-                       builder: (context) {
-                         return FlSearchPage<T>(itemBuilder: itemBuilder, onSearch: onSearch);
-                       },
-                     ),
-                   ).then((value) {
-                     if (value != null) {
-                       state.didChange(value);
-                     }
-                   });
-                 },
-                 child: InputDecorator(
-                   decoration: InputDecorationBuilder(
-                     enabled: enabled,
-                     hasError: state.hasError,
-                     helperText: helperText,
-                     placeholderText: placeholderText,
-                     prefixIcon: prefixIcon,
-                     suffixIcon: field.value != null
-                         ? GestureDetector(
-                             onTap: () {
-                               field.didChange(null);
-                             },
-                             child: const Icon(CupertinoIcons.clear_circled_solid),
-                           )
+           return FlReadonlyField(
+             label: label,
+             isRequired: isRequired,
+             enabled: enabled,
+             hasError: state.hasError,
+             placeholderText: placeholderText,
+             onTap: enabled
+                 ? () {
+                     Navigator.push<T>(
+                       state.context,
+                       _MaterialTransparentRoute(
+                         builder: (context) {
+                           return FlSearchPage<T>(builder: builder, onSearch: onSearch, loadingBuilder: loadingBuilder);
+                         },
+                       ),
+                     ).then((value) {
+                       if (value != null) {
+                         onChanged?.call(value);
+                         state.didChange(value);
+                       }
+                     });
+                   }
+                 : null,
+             helperText: helperText,
+             errorText: state.errorText,
+             content: state.value == null ? null : builder.buildForContent(state.context, FormFieldOption(value: state.value!)),
+             suffixIcon: field.value != null && !isRequired
+                 ? InkWell(
+                     onTap: enabled
+                         ? () {
+                             onChanged?.call(null);
+                             field.didChange(null);
+                           }
                          : null,
-                   ).create(field.context),
-                   isEmpty: state.value == null,
-                   child: state.value == null
-                       ? null
-                       : contentSelectedBuilder != null
-                       ? contentSelectedBuilder(state.value as T, state.context)
-                       : defaultContentSelectedBuilder(state.value as T, state.context),
-                 ),
-               ),
-               if (state.hasError) defaultErrorBuilder(state.context, state.errorText!),
-             ],
+                     child: const Icon(CupertinoIcons.clear_circled_solid),
+                   )
+                 : Icon(Icons.search),
            );
          },
        );
@@ -84,6 +73,8 @@ class FlSearchItemFormField<T> extends FormField<T> {
     return FlSearchItemFormFieldState<T>();
   }
 }
+
+//////////////////////////////////////////////////////////////////////////////
 
 class FlSearchItemFormFieldState<T> extends FormFieldState<T> {
   @override
@@ -100,6 +91,22 @@ class FlSearchItemFormFieldState<T> extends FormFieldState<T> {
   }
 }
 
-Widget defaultContentSelectedBuilder<T>(T data, BuildContext context) {
-  return Text(data.toString());
+//////////////////////////////////////////////////////////////////////////////
+
+class _MaterialTransparentRoute<T> extends PageRoute<T> with MaterialRouteTransitionMixin<T> {
+  _MaterialTransparentRoute({required this.builder, super.settings, this.maintainState = true, super.fullscreenDialog});
+
+  final WidgetBuilder builder;
+
+  @override
+  Widget buildContent(BuildContext context) => builder(context);
+
+  @override
+  bool get opaque => false;
+
+  @override
+  final bool maintainState;
+
+  @override
+  String get debugLabel => '${super.debugLabel}(${settings.name})';
 }
