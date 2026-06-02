@@ -2,6 +2,7 @@ import 'package:fl_form/fl_form.dart';
 import 'package:fl_form/formfield/value_converter.dart';
 import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
 import 'package:fl_form/formfield/widget/label_widget.dart';
+import 'package:fl_form/formfield/widget/text_field_tap_outside.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,6 +13,9 @@ class FlDoubleFormField extends FormField<double> {
   final TextEditingController? textEditingController;
 
   final ValueConverter<double> doubleConverter;
+
+  /// When null (default), [TextField] uses its built-in tap-outside behavior.
+  final TapRegionCallback? onTapOutside;
 
   FlDoubleFormField({
     super.key,
@@ -39,6 +43,7 @@ class FlDoubleFormField extends FormField<double> {
     ErrorBuilder errorBuilder = defaultErrorBuilder,
     this.textEditingController,
     this.doubleConverter = const DoubleConverter(),
+    this.onTapOutside,
   }) : super(
          validator: validator,
          onSaved: onSaved,
@@ -66,6 +71,9 @@ class FlDoubleFormField extends FormField<double> {
                  enableSuggestions: enableSuggestions,
                  autofillHints: autofillHints,
                  inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp(r'^([-+])?[0-9]*[.]?[0-9]*'))],
+                 onTapOutside: resolveTextFieldOnTapOutside(
+                   state.widget.onTapOutside,
+                 ),
                  onChanged: (value) {
                    double? v = doubleConverter.fromUiString(value);
                    if (v != null) {

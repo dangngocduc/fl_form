@@ -9,6 +9,10 @@ import 'package:flutter/material.dart';
 class FlSearchItemFormField<T> extends FormField<T> {
   final OnSearch<T> onSearch;
   final ValueWidgetBuilder<T> itemBuilder;
+
+  /// Passed to [FlSearchPage]; when null, search field uses default behavior.
+  final TapRegionCallback? onTapOutside;
+
   FlSearchItemFormField({
     super.key,
     required String label,
@@ -24,6 +28,7 @@ class FlSearchItemFormField<T> extends FormField<T> {
     super.initialValue,
     required this.onSearch,
     required this.itemBuilder,
+    this.onTapOutside,
     String? helperText,
     bool isRequired = false,
   }) : super(
@@ -40,7 +45,11 @@ class FlSearchItemFormField<T> extends FormField<T> {
                      state.context,
                      MaterialPageRoute(
                        builder: (context) {
-                         return FlSearchPage<T>(itemBuilder: itemBuilder, onSearch: onSearch);
+                         return FlSearchPage<T>(
+                           itemBuilder: itemBuilder,
+                           onSearch: onSearch,
+                           onTapOutside: state.widget.onTapOutside,
+                         );
                        },
                      ),
                    ).then((value) {

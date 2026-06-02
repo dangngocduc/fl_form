@@ -33,10 +33,26 @@ class FlBoolFormField extends FormField<bool> {
                Container(
                  padding: padding,
                  child: switchAtStart
-                     ? _SwitchStart(field: field, title: title, spacing: spacing, value: field.value!, enabled: enabled)
-                     : _SwitchEnd(field: field, title: title, spacing: spacing, value: field.value!, enabled: enabled),
+                     ? _SwitchStart(
+                         field: field,
+                         title: title,
+                         spacing: spacing,
+                         value: field.value!,
+                         enabled: enabled,
+                       )
+                     : _SwitchEnd(
+                         field: field,
+                         title: title,
+                         spacing: spacing,
+                         value: field.value!,
+                         enabled: enabled,
+                       ),
                ),
-               if (helperText != null) Text(helperText, style: Theme.of(field.context).textTheme.bodySmall),
+               if (helperText != null)
+                 Text(
+                   helperText,
+                   style: Theme.of(field.context).textTheme.bodySmall,
+                 ),
              ],
            );
          },
@@ -56,7 +72,13 @@ class _SwitchStart extends StatelessWidget {
 
   final FormFieldState<bool> field;
 
-  const _SwitchStart({super.key, this.title = '', this.spacing = 0, this.value = false, this.enabled = true, required this.field});
+  const _SwitchStart({
+    this.title = '',
+    this.spacing = 0,
+    this.value = false,
+    this.enabled = true,
+    required this.field,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +94,10 @@ class _SwitchStart extends StatelessWidget {
               : null,
         ),
         SizedBox(width: spacing),
-        Text(title, style: Theme.of(context).extension<FlFormFieldTheme>()?.style),
+        Text(
+          title,
+          style: Theme.of(context).extension<FlFormFieldTheme>()?.style,
+        ),
       ],
     );
   }
@@ -91,14 +116,23 @@ class _SwitchEnd extends StatelessWidget {
 
   final FormFieldState<bool> field;
 
-  const _SwitchEnd({super.key, this.title = '', this.spacing = 0, this.value = false, this.enabled = true, required this.field});
+  const _SwitchEnd({
+    this.title = '',
+    this.spacing = 0,
+    this.value = false,
+    this.enabled = true,
+    required this.field,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       //mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Text(title, style: Theme.of(context).extension<FlFormFieldTheme>()?.style),
+        Text(
+          title,
+          style: Theme.of(context).extension<FlFormFieldTheme>()?.style,
+        ),
         Spacer(),
         Switch(
           value: value,

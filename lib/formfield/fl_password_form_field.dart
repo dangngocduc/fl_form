@@ -1,6 +1,7 @@
 import 'package:fl_form/formfield/fl_text_form_field.dart';
 import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
 import 'package:fl_form/formfield/widget/label_widget.dart';
+import 'package:fl_form/formfield/widget/text_field_tap_outside.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
@@ -11,6 +12,9 @@ class FlPasswordFormField extends FormField<String> {
   final TextEditingController? textEditingController;
 
   final bool obscureText;
+
+  /// When null (default), [TextField] uses its built-in tap-outside behavior.
+  final TapRegionCallback? onTapOutside;
 
   FlPasswordFormField({
     super.key,
@@ -34,6 +38,7 @@ class FlPasswordFormField extends FormField<String> {
     this.obscureText = true,
     String? helperText,
     String? placeholderText,
+    this.onTapOutside,
   }) : super(
          validator: validator,
          onSaved: onSaved,
@@ -58,6 +63,9 @@ class FlPasswordFormField extends FormField<String> {
                  textInputAction: textInputAction,
                  autocorrect: false,
                  enableSuggestions: false,
+                 onTapOutside: resolveTextFieldOnTapOutside(
+                   state.widget.onTapOutside,
+                 ),
                  onChanged: (value) {
                    onChanged?.call(value);
                    state.didChange(value);
