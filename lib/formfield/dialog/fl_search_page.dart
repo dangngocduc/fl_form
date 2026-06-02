@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fl_form/formfield/widget/default_error_builder.dart';
+import 'package:fl_form/formfield/widget/text_field_tap_outside.dart';
 import 'package:flutter/material.dart';
 import 'package:stream_transform/stream_transform.dart';
 
@@ -14,8 +15,19 @@ class FlSearchPage<T> extends StatefulWidget {
   final WidgetBuilder? loadingBuilder;
   final ErrorWidgetBuilder? errorWidgetBuilder;
   final String? searchPlaceholder;
-  const FlSearchPage({Key? key, required this.onSearch, required this.itemBuilder, this.errorWidgetBuilder, this.loadingBuilder, this.searchPlaceholder})
-    : super(key: key);
+
+  /// When null (default), [TextField] uses its built-in tap-outside behavior.
+  final TapRegionCallback? onTapOutside;
+
+  const FlSearchPage({
+    super.key,
+    required this.onSearch,
+    required this.itemBuilder,
+    this.errorWidgetBuilder,
+    this.loadingBuilder,
+    this.searchPlaceholder,
+    this.onTapOutside,
+  });
 
   @override
   State<FlSearchPage<T>> createState() => _FlSearchPageState<T>();
@@ -31,12 +43,14 @@ class _FlSearchPageState<T> extends State<FlSearchPage<T>> {
   @override
   void initState() {
     super.initState();
-    _searchResults = _searchStream.stream.debounce(const Duration(milliseconds: 700)).asyncMap((String event) async {
-      print("request $event");
-      List<T> results = await widget.onSearch(event);
-      print("result ${results.length}");
-      return results;
-    });
+    _searchResults = _searchStream.stream
+        .debounce(const Duration(milliseconds: 700))
+        .asyncMap((String event) async {
+          print("request $event");
+          List<T> results = await widget.onSearch(event);
+          print("result ${results.length}");
+          return results;
+        });
   }
 
   @override
@@ -51,9 +65,13 @@ class _FlSearchPageState<T> extends State<FlSearchPage<T>> {
         preferredSize: const Size.fromHeight(kToolbarHeight),
         child: SafeArea(
           child: Container(
-            decoration: BoxDecoration(border: Border(bottom: Divider.createBorderSide(context))),
+            decoration: BoxDecoration(
+              border: Border(bottom: Divider.createBorderSide(context)),
+            ),
             child: Container(
-              decoration: BoxDecoration(color: Theme.of(context).inputDecorationTheme.fillColor),
+              decoration: BoxDecoration(
+                color: Theme.of(context).inputDecorationTheme.fillColor,
+              ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -69,16 +87,27 @@ class _FlSearchPageState<T> extends State<FlSearchPage<T>> {
                       padding: EdgeInsets.only(top: 2),
                       child: TextField(
                         cursorWidth: 1,
+                        onTapOutside: resolveTextFieldOnTapOutside(
+                          widget.onTapOutside,
+                        ),
                         onChanged: (value) {
                           _searchStream.sink.add(value);
                         },
                         controller: controller,
                         autofocus: true,
-                        style: Theme.of(context).extension<FlFormFieldTheme>()?.style,
+                        style: Theme.of(
+                          context,
+                        ).extension<FlFormFieldTheme>()?.style,
                         decoration: InputDecoration(
-                          hintStyle: Theme.of(context).extension<FlFormFieldTheme>()?.placeHolderStyle,
-                          hintText: widget.searchPlaceholder ?? 'Type Something...',
-                          contentPadding: const EdgeInsets.only(left: 8, top: 4),
+                          hintStyle: Theme.of(
+                            context,
+                          ).extension<FlFormFieldTheme>()?.placeHolderStyle,
+                          hintText:
+                              widget.searchPlaceholder ?? 'Type Something...',
+                          contentPadding: const EdgeInsets.only(
+                            left: 8,
+                            top: 4,
+                          ),
                           border: InputBorder.none,
                           errorBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
@@ -112,7 +141,11 @@ class _FlSearchPageState<T> extends State<FlSearchPage<T>> {
                   onTap: () {
                     Navigator.pop(context, snapshot.requireData[index]);
                   },
-                  child: widget.itemBuilder(context, snapshot.requireData[index]!, null),
+                  child: widget.itemBuilder(
+                    context,
+                    snapshot.requireData[index]!,
+                    null,
+                  ),
                 );
               },
             );

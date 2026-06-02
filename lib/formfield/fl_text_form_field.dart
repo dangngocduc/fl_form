@@ -1,5 +1,6 @@
 import 'package:fl_form/formfield/widget/input_decoration_builder.dart';
 import 'package:fl_form/formfield/widget/label_widget.dart';
+import 'package:fl_form/formfield/widget/text_field_tap_outside.dart';
 import 'package:flutter/material.dart';
 import 'package:tuple/tuple.dart';
 
@@ -12,6 +13,11 @@ class FlTextFormField extends FormField<String> {
   @Deprecated("Use FlPasswordFormField instead.")
   final bool isPassword;
   final TextEditingController? textEditingController;
+
+  /// Called when the user taps outside the text field.
+  ///
+  /// When null (default), [TextField] uses its built-in tap-outside behavior.
+  final TapRegionCallback? onTapOutside;
 
   FlTextFormField({
     super.key,
@@ -39,9 +45,11 @@ class FlTextFormField extends FormField<String> {
     Iterable<String>? autofillHints,
     double? paddingLeftError,
     String? helperText,
-    @Deprecated("Use FlPasswordFormField instead.") Tuple2<Widget, Widget>? iconObscureText,
+    @Deprecated("Use FlPasswordFormField instead.")
+    Tuple2<Widget, Widget>? iconObscureText,
     ErrorBuilder errorBuilder = defaultErrorBuilder,
     this.textEditingController,
+    this.onTapOutside,
   }) : super(
          validator: validator,
          onSaved: onSaved,
@@ -49,6 +57,7 @@ class FlTextFormField extends FormField<String> {
          autovalidateMode: autovalidateMode,
          restorationId: restorationId,
          enabled: enabled,
+
          builder: (field) {
            final state = field as FlTextFormFieldState;
 
@@ -70,14 +79,21 @@ class FlTextFormField extends FormField<String> {
                  textInputAction: textInputAction,
                  autocorrect: autocorrect,
                  enableSuggestions: enableSuggestions,
+                 onTapOutside: resolveTextFieldOnTapOutside(
+                   state.widget.onTapOutside,
+                 ),
                  autofillHints: autofillHints,
                  onChanged: (value) {
                    onChanged?.call(value);
                    state.didChange(value);
                  },
                  style: enabled
-                     ? Theme.of(field.context).extension<FlFormFieldTheme>()?.style
-                     : Theme.of(field.context).extension<FlFormFieldTheme>()?.disableStyle,
+                     ? Theme.of(
+                         field.context,
+                       ).extension<FlFormFieldTheme>()?.style
+                     : Theme.of(
+                         field.context,
+                       ).extension<FlFormFieldTheme>()?.disableStyle,
                  decoration: InputDecorationBuilder(
                    enabled: enabled,
                    hasError: state.hasError,
@@ -90,13 +106,16 @@ class FlTextFormField extends FormField<String> {
                              state.toglgleShowPass();
                            },
                            child: state.obscureText
-                               ? (iconObscureText?.item1 ?? const Icon(Icons.visibility_outlined))
-                               : (iconObscureText?.item2 ?? const Icon(Icons.visibility_off_outlined)),
+                               ? (iconObscureText?.item1 ??
+                                     const Icon(Icons.visibility_outlined))
+                               : (iconObscureText?.item2 ??
+                                     const Icon(Icons.visibility_off_outlined)),
                          )
                        : null,
                  ).create(field.context),
                ),
-               if (state.hasError) errorBuilder(state.context, state.errorText!),
+               if (state.hasError)
+                 errorBuilder(state.context, state.errorText!),
              ],
            );
          },
@@ -128,7 +147,9 @@ class FlTextFormFieldState extends FormFieldState<String> {
       obscureText = false;
     }
 
-    textEditingController = widget.textEditingController ?? TextEditingController(text: widget.initialValue);
+    textEditingController =
+        widget.textEditingController ??
+        TextEditingController(text: widget.initialValue);
   }
 
   @override

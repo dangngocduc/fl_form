@@ -10,9 +10,9 @@ import 'fl_form_field_theme.dart';
 class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
   FlDateRangeFormField({
     super.key,
-    Tuple2<DateTime, DateTime>? initialValue,
-    FormFieldSetter<Tuple2<DateTime, DateTime>>? onSaved,
-    FormFieldValidator<Tuple2<DateTime, DateTime>>? validator,
+    super.initialValue,
+    super.onSaved,
+    super.validator,
     EdgeInsetsGeometry? contentPadding,
     AutovalidateMode? autovalidateMode,
     required String label,
@@ -26,9 +26,6 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
     String toText = 'To',
     String? helperText,
   }) : super(
-         initialValue: initialValue,
-         onSaved: onSaved,
-         validator: validator,
          builder: (state) {
            String valueDisplay = '';
            if (state.value != null) {
@@ -50,7 +47,9 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
                        return CalendarPopUp(
                          initialStartDate: state.value?.item1,
                          initialEndDate: state.value?.item2,
-                         maximumDate: DateTime.now().add(const Duration(days: 90)),
+                         maximumDate: DateTime.now().add(
+                           const Duration(days: 90),
+                         ),
                          textSelectDate: textSelectDate,
                          textSelectEndDate: textSelectEndDate,
                          fromText: fromText,
@@ -84,22 +83,33 @@ class FlDateRangeFormField extends FormField<Tuple2<DateTime, DateTime>> {
                      crossAxisAlignment: CrossAxisAlignment.center,
                      children: [
                        Expanded(
-                         child: DateInfo(icon: prefixIcon ?? SizedBox.shrink(), hint: 'Start date', dateTime: state.value?.item1),
+                         child: DateInfo(
+                           icon: prefixIcon ?? SizedBox.shrink(),
+                           hint: 'Start date',
+                           dateTime: state.value?.item1,
+                         ),
                        ),
                        Container(
                          height: 16,
                          width: 2,
-                         margin: const EdgeInsets.symmetric(horizontal: 8).copyWith(right: 16),
+                         margin: const EdgeInsets.symmetric(
+                           horizontal: 8,
+                         ).copyWith(right: 16),
                          color: Theme.of(state.context).dividerColor,
                        ),
                        Expanded(
-                         child: DateInfo(icon: prefixIcon ?? SizedBox.shrink(), hint: 'End date', dateTime: state.value?.item2),
+                         child: DateInfo(
+                           icon: prefixIcon ?? SizedBox.shrink(),
+                           hint: 'End date',
+                           dateTime: state.value?.item2,
+                         ),
                        ),
                      ],
                    ),
                  ),
                ),
-               if (state.hasError) defaultErrorBuilder(state.context, state.errorText!),
+               if (state.hasError)
+                 defaultErrorBuilder(state.context, state.errorText!),
              ],
            );
          },
@@ -111,7 +121,12 @@ class DateInfo extends StatelessWidget {
   final DateTime? dateTime;
   final Widget icon;
 
-  const DateInfo({super.key, required this.hint, this.dateTime, required this.icon});
+  const DateInfo({
+    super.key,
+    required this.hint,
+    this.dateTime,
+    required this.icon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -120,10 +135,17 @@ class DateInfo extends StatelessWidget {
         Container(width: 48, child: icon, alignment: Alignment.center),
         Expanded(
           child: dateTime == null
-              ? Text(hint, style: Theme.of(context).extension<FlFormFieldTheme>()?.placeHolderStyle)
+              ? Text(
+                  hint,
+                  style: Theme.of(
+                    context,
+                  ).extension<FlFormFieldTheme>()?.placeHolderStyle,
+                )
               : Text(
                   MaterialLocalizations.of(context).formatMediumDate(dateTime!),
-                  style: Theme.of(context).extension<FlFormFieldTheme>()?.style.copyWith(height: 1),
+                  style: Theme.of(
+                    context,
+                  ).extension<FlFormFieldTheme>()?.style.copyWith(height: 1),
                 ),
         ),
       ],

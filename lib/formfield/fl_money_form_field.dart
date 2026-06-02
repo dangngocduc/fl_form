@@ -2,12 +2,16 @@ import 'dart:developer' as developer;
 
 import 'package:fl_form/formfield/widget/default_error_builder.dart';
 import 'package:fl_form/formfield/widget/label_widget.dart';
+import 'package:fl_form/formfield/widget/text_field_tap_outside.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import 'fl_form_field_theme.dart';
 
 class FlMoneyFormField extends FormField<double> {
+  /// When null (default), [TextField] uses its built-in tap-outside behavior.
+  final TapRegionCallback? onTapOutside;
+
   FlMoneyFormField({
     super.key,
     double? initialValue,
@@ -20,6 +24,7 @@ class FlMoneyFormField extends FormField<double> {
     Widget? prefixIcon,
     bool isRequired = false,
     bool enabled = true,
+    this.onTapOutside,
   }) : super(
          initialValue: initialValue,
          onSaved: onSaved,
@@ -46,6 +51,9 @@ class FlMoneyFormField extends FormField<double> {
                    children: [
                      Expanded(
                        child: TextField(
+                         onTapOutside: resolveTextFieldOnTapOutside(
+                           state.widget.onTapOutside,
+                         ),
                          onChanged: (value) {
                            if (value.isNotEmpty) {
                              var moneyText = value.replaceAll(',', '');
